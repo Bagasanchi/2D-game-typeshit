@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dwi18i76rjai6"]
+
+[ext_resource type="Script" uid="uid://boaaxjr70kef0" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://clax1r05md063" path="res://Player/Sprites/The DARK Series - The Blood King/The Blood King/idle(32x32).png" id="1_l8h54"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7dm0k"]
+
+[node name="Player" type="CharacterBody2D" unique_id=1677022981]
+script = ExtResource("1_4ntmi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
+shape = SubResource("CircleShape2D_7dm0k")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1921300994]
+texture_filter = 1
+position = Vector2(0, -32)
+scale = Vector2(2, 2)
+texture = ExtResource("1_l8h54")
+vframes = 12
