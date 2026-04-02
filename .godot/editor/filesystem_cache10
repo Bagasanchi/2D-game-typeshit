@@ -1,0 +1,37 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1775088091
+icon.svg::CompressedTexture2D::3723800728317602936::1775059116::1775059116::1::::<><><>0<>0<>7caf90f4364111bcec42b1a0f603f648<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+main.tscn::PackedScene::5786905049988621406::1775087443::0::1::::<><><>0<>0<><>::uid://dwi18i76rjai6::::res://Player/player.tscn
+README.md::TextFile::-1::1775059116::0::1::::<><><>0<>0<><>::
+::res://Player/::1775087439
+player.tscn::PackedScene::8721569677211395815::1775087439::0::1::::<><><>0<>0<><>::uid://boaaxjr70kef0::::res://Player/Scripts/player.gd<>uid://clax1r05md063::::res://Player/Sprites/The DARK Series - The Blood King/The Blood King/idle(32x32).png
+::res://Player/Scripts/::1775059116
+player.gd::GDScript::3369106068344933235::1775087177::0::1::::Player<>CharacterBody2D<><>0<>0<><>::
+::res://Player/Sprites/::1775059116
+::res://Player/Sprites/The DARK Series - The Blood King/::1775059116
+::res://Player/Sprites/The DARK Series - The Blood King/Bonus Tileset/::1775059116
+Bonus Tileset.png::CompressedTexture2D::2523888456641259815::1775059116::1775059116::1::::<><><>0<>0<>78ed47cd479e2776074cc344d634ecbd<>res://.godot/imported/Bonus Tileset.png-186f1ba7e5a6b287a9a1df82483ba3e6.ctex::
+::res://Player/Sprites/The DARK Series - The Blood King/The Blood King/::1775059116
+charge transition down (48x32).png::CompressedTexture2D::4630218956761000026::1775059116::1775059116::1::::<><><>0<>0<>b3bae3b39ed6bbc3ec8a8c6c487ac50a<>res://.godot/imported/charge transition down (48x32).png-ad5c29688e1b26e7da8d00d96eeb7c82.ctex::
+charge transition up (48x32).png::CompressedTexture2D::1054043498966913533::1775059116::1775059116::1::::<><><>0<>0<>fd3949051b65bff16db7db0bfb933b7b<>res://.godot/imported/charge transition up (48x32).png-0856eac5ce1a5c9711c028633e51af00.ctex::
+charge(48x32).png::CompressedTexture2D::1455424877649448401::1775059116::1775059116::1::::<><><>0<>0<>9f79adc481646f67dbeacf6b7ab61267<>res://.godot/imported/charge(48x32).png-5980b0206c7929ff20aff7947bae48d3.ctex::
+death or teleport (168x79).png::CompressedTexture2D::4992430760779059548::1775059116::1775059116::1::::<><><>0<>0<>b9b932f3860b0d694db51d61dc768b6c<>res://.godot/imported/death or teleport (168x79).png-e6d9244991e96a991f530e11d561c236.ctex::
+Dodge Charge Attack(144x32).png::CompressedTexture2D::4480814765862615632::1775059116::1775059116::1::::<><><>0<>0<>991817950d0e8a92c9ce7e7715a4dd51<>res://.godot/imported/Dodge Charge Attack(144x32).png-c708f77838162731a6f876bc015ac62d.ctex::
+Double Slash no VFX (48x32).png::CompressedTexture2D::8113834169174527967::1775059116::1775059116::1::::<><><>0<>0<>124f8589001e0d1ad1e530949b560254<>res://.godot/imported/Double Slash no VFX (48x32).png-baf663de6577ddbdc76b4c527a482d2d.ctex::
+Double Slash With VFX (48x32).png::CompressedTexture2D::2148578719632323898::1775059116::1775059116::1::::<><><>0<>0<>b208a4449df0f66bec692ebe43352b7d<>res://.godot/imported/Double Slash With VFX (48x32).png-a90044d180bf531b085993f8d5bbd7af.ctex::
+fall (48x32).png::CompressedTexture2D::265167776462898042::1775059116::1775059116::1::::<><><>0<>0<>dc2a7cb471f770d76a78ae5e186b4623<>res://.godot/imported/fall (48x32).png-a59280f765d9b263d88ac7adf1c5d0d2.ctex::
+Finisher (64x32).png::CompressedTexture2D::6197936135230215378::1775059116::1775059116::1::::<><><>0<>0<>1fa17d57f9d149638226de2f341d1729<>res://.godot/imported/Finisher (64x32).png-3d7d6659328f495cbe825607ae15eda5.ctex::
+heart slam (168x79).png::CompressedTexture2D::838167289953061868::1775059116::1775059116::1::::<><><>0<>0<>92960687328f658ead0c5825449fc830<>res://.godot/imported/heart slam (168x79).png-b571a5f5b423e5e683a82cf1291304e4.ctex::
+Hit (32x32)).png::CompressedTexture2D::2697216613010613658::1775059116::1775059116::1::::<><><>0<>0<>5875292911065f5c899288b0ff0563e4<>res://.godot/imported/Hit (32x32)).png-b949c5b1b67d3cb98e39ef6574b5cdc0.ctex::
+idle(32x32).png::CompressedTexture2D::5546362501776023798::1775059116::1775059116::1::::<><><>0<>0<>702af92b275a780f050580820b1e1b03<>res://.godot/imported/idle(32x32).png-476bdfb44bbc1cddb5da734da45ee064.ctex::
+Jump (32x32).png::CompressedTexture2D::2835463133481219608::1775059116::1775059116::1::::<><><>0<>0<>b17a6b6e3f5190e862a4ab17a06b9fe9<>res://.godot/imported/Jump (32x32).png-d5bdb30b1c0cd59bb78247655567c265.ctex::
+Jump Slam Attack with No VFX (168x79).png::CompressedTexture2D::7326565129067977261::1775059116::1775059116::1::::<><><>0<>0<>b54f2d3e0747e3d20783e5399d06fc42<>res://.godot/imported/Jump Slam Attack with No VFX (168x79).png-97ea668a62c33752be7225349f063462.ctex::
+Jump Slam Attack with VFX (168x79).png::CompressedTexture2D::6517355347331573042::1775059116::1775059116::1::::<><><>0<>0<>45c525c48925445f384da8186ac1fa71<>res://.godot/imported/Jump Slam Attack with VFX (168x79).png-a6b4c391c36878a86a6323bf76966ebb.ctex::
+Jump to fall trans (32x32).png::CompressedTexture2D::3917916413774164254::1775059116::1775059116::1::::<><><>0<>0<>86355f082bbefc87ebe5305eaa66331b<>res://.godot/imported/Jump to fall trans (32x32).png-7cf3346d1a784ab96964edd24bbb65b2.ctex::
+Run (32x32).png::CompressedTexture2D::1367696361444247044::1775059116::1775059116::1::::<><><>0<>0<>f32ce66c700b8eac0d7ad38f75799d73<>res://.godot/imported/Run (32x32).png-62c0f676cb082c2a29de905164a984ec.ctex::
+Stab and spin throw (136x32).png::CompressedTexture2D::8015638855893560804::1775059116::1775059116::1::::<><><>0<>0<>ecb228c85e12175810f503d4bf216232<>res://.godot/imported/Stab and spin throw (136x32).png-a0c0502f42180655bc1e3ca6170d1359.ctex::
+Stab and spin throw with no VFX (168x79).png::CompressedTexture2D::4824398921388766562::1775059116::1775059116::1::::<><><>0<>0<>75c735eea250039e65b0d96c9b0e4814<>res://.godot/imported/Stab and spin throw with no VFX (168x79).png-ab1ff93abbfba3461cba80c44f95d33a.ctex::
+teleport appear (168x79).png::CompressedTexture2D::5043483277094721929::1775059116::1775059116::1::::<><><>0<>0<>1038aaf2f3ec299f84b98808de56e19c<>res://.godot/imported/teleport appear (168x79).png-cc38af0be6d653f050d6e284eae76a28.ctex::
+VFX for double slash (80x32).png::CompressedTexture2D::542480854965449438::1775059116::1775059116::1::::<><><>0<>0<>a4773a07090d16528f695a1536a9b472<>res://.godot/imported/VFX for double slash (80x32).png-ac4473d75bf36ba6c4179272986a8597.ctex::
+VFX for jump slam (80x32).png::CompressedTexture2D::3690265927164618420::1775059116::1775059116::1::::<><><>0<>0<>17b796473b0744f4f652b407671fb95c<>res://.godot/imported/VFX for jump slam (80x32).png-7a290ca931b356b7bd998f9cd50c3be5.ctex::
+VFX for Stab and spin throw (168x79).png::CompressedTexture2D::82536936843184947::1775059116::1775059116::1::::<><><>0<>0<>cc23434e980cb47498a310369ca7bd35<>res://.godot/imported/VFX for Stab and spin throw (168x79).png-9b9a217a6b7de685b9b9b5ebd3981e93.ctex::
