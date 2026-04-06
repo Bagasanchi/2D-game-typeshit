@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://boaaxjr70kef0" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
 [ext_resource type="Texture2D" uid="uid://clax1r05md063" path="res://Player/Sprites/The DARK Series - The Blood King/The Blood King/idle(32x32).png" id="1_l8h54"]
 [ext_resource type="Texture2D" uid="uid://tqr02xtf3kw7" path="res://Player/Sprites/The DARK Series - The Blood King/The Blood King/Run (32x32).png" id="3_btcbx"]
+[ext_resource type="Texture2D" uid="uid://bgnrwtb4gcyv5" path="res://Player/Sprites/The DARK Series - The Blood King/The Blood King/Jump (32x32).png" id="3_k53q1"]
+[ext_resource type="Texture2D" uid="uid://bv24rmvg61c0e" path="res://Player/Sprites/The DARK Series - The Blood King/The Blood King/Jump to fall trans (32x32).png" id="4_fhl08"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ntmi"]
 atlas = ExtResource("1_l8h54")
@@ -51,6 +53,30 @@ region = Rect2(0, 320, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_p5o4e"]
 atlas = ExtResource("1_l8h54")
 region = Rect2(0, 352, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hshwv"]
+atlas = ExtResource("3_k53q1")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpjlu"]
+atlas = ExtResource("3_k53q1")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mwp6"]
+atlas = ExtResource("3_k53q1")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qemgg"]
+atlas = ExtResource("3_k53q1")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8viyr"]
+atlas = ExtResource("4_fhl08")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sm0op"]
+atlas = ExtResource("4_fhl08")
+region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gu6f8"]
 atlas = ExtResource("3_btcbx")
@@ -130,6 +156,34 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_hshwv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpjlu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8mwp6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qemgg")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8viyr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sm0op")
+}],
+"loop": true,
+"name": &"jump_to_fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_gu6f8")
 }, {
 "duration": 1.0,
@@ -167,9 +221,10 @@ script = ExtResource("1_4ntmi")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_4ntmi")
-animation = &"idle"
-frame_progress = 0.61977774
+animation = &"walk"
+frame_progress = 0.056912713
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
+visible = false
 position = Vector2(6, -9.5)
 shape = SubResource("RectangleShape2D_btcbx")
