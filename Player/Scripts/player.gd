@@ -24,13 +24,10 @@ func _physics_process(_delta: float) -> void:
 	velocity = direction.normalized() * move_speed
 
 	if direction != Vector2.ZERO:
-		animated_sprite.play("walk")
+		animated_sprite.play("run")
 		if direction.x != 0.0:
 			_set_facing(direction.x < 0.0)
 	else:
 		animated_sprite.play("idle")
 
 	move_and_slide()
-
-
-# just some random text to test something
