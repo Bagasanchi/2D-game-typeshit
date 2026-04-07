@@ -16,7 +16,6 @@ func _set_facing(is_left: bool) -> void:
 	var correction := flip_visual_correction_px if is_left else -flip_visual_correction_px
 	animated_sprite.position = _sprite_base_position + Vector2(correction, 0.0)
 
-
 func _physics_process(_delta: float) -> void:
 	var direction : Vector2 = Vector2.ZERO
 	direction.x = Input.get_action_strength("right") - Input.get_action_strength("left")

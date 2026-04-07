@@ -152,7 +152,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -221,8 +221,7 @@ script = ExtResource("1_4ntmi")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_4ntmi")
-animation = &"walk"
-frame_progress = 0.056912713
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
 visible = false
