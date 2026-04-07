@@ -263,7 +263,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"roll",
-"speed": 10.0
+"speed": 24.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -309,8 +309,7 @@ script = ExtResource("1_4ntmi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
 sprite_frames = SubResource("SpriteFrames_4ntmi")
-animation = &"dash"
-frame_progress = 0.30314004
+animation = &"roll"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
 visible = false
