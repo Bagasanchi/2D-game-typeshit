@@ -2,16 +2,24 @@
 
 [ext_resource type="Script" uid="uid://boaaxjr70kef0" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
 [ext_resource type="Texture2D" uid="uid://bqki73ib2rdn3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle.png" id="2_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://3tiwpq6y2ghk" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall0.png" id="2_gpjlu"]
+[ext_resource type="Texture2D" uid="uid://c8xs5w42v7p3l" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall1.png" id="3_8mwp6"]
 [ext_resource type="Texture2D" uid="uid://cnysev1lwlp43" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink1.png" id="3_k53q1"]
 [ext_resource type="Texture2D" uid="uid://dbvphe8i77ej3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink0.png" id="4_fhl08"]
+[ext_resource type="Texture2D" uid="uid://cyief831d3iv3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall2.png" id="4_qemgg"]
+[ext_resource type="Texture2D" uid="uid://skuji30omh7q" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall3.png" id="5_8viyr"]
 [ext_resource type="Texture2D" uid="uid://chhadxo57q1cu" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink2.png" id="5_vtle1"]
 [ext_resource type="Texture2D" uid="uid://b4ammrdb6osc0" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run0.png" id="6_dkpta"]
 [ext_resource type="Texture2D" uid="uid://diskyjgs7t23" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run1.png" id="7_lfmf2"]
 [ext_resource type="Texture2D" uid="uid://cajccp4mmfm7" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run2.png" id="8_pisgm"]
 [ext_resource type="Texture2D" uid="uid://bfsiqhdgea53r" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run3.png" id="9_b1ygp"]
 [ext_resource type="Texture2D" uid="uid://btpl6ur7hqaqr" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run4.png" id="10_o28un"]
+[ext_resource type="Texture2D" uid="uid://clq5q7uhmdc2t" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump0.png" id="10_sm0op"]
+[ext_resource type="Texture2D" uid="uid://ghm3kdghbjhg" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump1.png" id="11_76lrf"]
 [ext_resource type="Texture2D" uid="uid://bb6wf2aaals0l" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run5.png" id="11_n471f"]
 [ext_resource type="Texture2D" uid="uid://whhnho07wxyg" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run6.png" id="12_7emwf"]
+[ext_resource type="Texture2D" uid="uid://myqhwmjh4go3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump2.png" id="12_efx54"]
+[ext_resource type="Texture2D" uid="uid://bowrx5meu357n" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump3.png" id="13_755ss"]
 [ext_resource type="Texture2D" uid="uid://l1q24iy2e11q" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run7.png" id="13_hshwv"]
 [ext_resource type="Texture2D" uid="uid://bevcgxykaau3y" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run8.png" id="14_gpjlu"]
 [ext_resource type="Texture2D" uid="uid://c6f67v08ogeu1" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run9.png" id="15_8mwp6"]
@@ -19,6 +27,23 @@
 [sub_resource type="SpriteFrames" id="SpriteFrames_4ntmi"]
 resource_local_to_scene = true
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_gpjlu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_8mwp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qemgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_8viyr")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("2_4ntmi")
@@ -119,6 +144,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("10_sm0op")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_76lrf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_efx54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_755ss")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("6_dkpta")
 }, {
 "duration": 1.0,
@@ -154,18 +196,17 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_btcbx"]
-size = Vector2(12, 19)
+size = Vector2(9, 17)
 
 [node name="Player" type="CharacterBody2D" unique_id=1677022981]
 script = ExtResource("1_4ntmi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
-scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_4ntmi")
-animation = &"run"
-frame_progress = 0.7693472
+animation = &"idle"
+frame_progress = 0.2346827
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
 visible = false
-position = Vector2(6, -9.5)
+position = Vector2(1.5, 0.5)
 shape = SubResource("RectangleShape2D_btcbx")
