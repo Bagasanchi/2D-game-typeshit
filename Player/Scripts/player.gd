@@ -2,6 +2,8 @@ class_name Player extends CharacterBody2D
 
 var move_speed : float = 200.0
 @export var flip_visual_correction_px: float = 7.0
+@export var jump_velocity: float = -220.0
+@export var gravity: float = 700.0
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 var _sprite_base_position: Vector2
 
@@ -12,18 +14,27 @@ func _ready() -> void:
 func _set_facing(is_left: bool) -> void:
 	animated_sprite.flip_h = is_left
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	var direction : Vector2 = Vector2.ZERO
 	direction.x = Input.get_action_strength("right") - Input.get_action_strength("left")
 
-	velocity = direction.normalized() * move_speed
+	velocity.x = direction.x * move_speed
 
-	if Input.is_physical_key_pressed(KEY_SPACE):
-		animated_sprite.play("jump")
+	if not is_on_floor():
+		velocity.y += gravity * delta
+	elif Input.is_action_just_pressed("jump"):
+		velocity.y = jump_velocity
+
+	if direction.x != 0.0:
+		_set_facing(direction.x < 0.0)
+
+	if not is_on_floor():
+		if velocity.y < 0.0:
+			animated_sprite.play("jump")
+		else:
+			animated_sprite.play("fall")
 	elif direction != Vector2.ZERO:
 		animated_sprite.play("run")
-		if direction.x != 0.0:
-			_set_facing(direction.x < 0.0)
 	else:
 		animated_sprite.play("idle")
 
