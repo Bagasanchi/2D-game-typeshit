@@ -1,11 +1,7 @@
 class_name Player extends CharacterBody2D
 
-<<<<<<< HEAD
 var move_speed : float = 200.0
 @export var flip_visual_correction_px: float = 7.0
-=======
-var move_speed : float = 100.0
->>>>>>> d7c9932785a760ed3cd1b02e3f9f82601d4b2d2f
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 var _sprite_base_position: Vector2
 
