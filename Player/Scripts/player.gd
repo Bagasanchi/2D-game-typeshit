@@ -31,6 +31,3 @@ func _physics_process(_delta: float) -> void:
 		animated_sprite.play("idle")
 
 	move_and_slide()
-
-
-# just some random text to test something
