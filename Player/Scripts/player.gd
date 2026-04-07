@@ -24,7 +24,7 @@ func _physics_process(_delta: float) -> void:
 	velocity = direction.normalized() * move_speed
 
 	if direction != Vector2.ZERO:
-		animated_sprite.play("walk")
+		animated_sprite.play("run")
 		if direction.x != 0.0:
 			_set_facing(direction.x < 0.0)
 	else:
