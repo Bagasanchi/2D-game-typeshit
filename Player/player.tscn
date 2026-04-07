@@ -160,7 +160,6 @@ size = Vector2(12, 19)
 script = ExtResource("1_4ntmi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
-scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_4ntmi")
 animation = &"run"
 frame_progress = 0.7693472
