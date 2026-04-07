@@ -196,17 +196,17 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_btcbx"]
-size = Vector2(12, 19)
+size = Vector2(9, 17)
 
 [node name="Player" type="CharacterBody2D" unique_id=1677022981]
 script = ExtResource("1_4ntmi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
 sprite_frames = SubResource("SpriteFrames_4ntmi")
-animation = &"fall"
-frame_progress = 0.4135523
+animation = &"idle"
+frame_progress = 0.2346827
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
 visible = false
-position = Vector2(6, -9.5)
+position = Vector2(1.5, 0.5)
 shape = SubResource("RectangleShape2D_btcbx")
