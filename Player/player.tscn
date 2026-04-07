@@ -3,11 +3,15 @@
 [ext_resource type="Script" uid="uid://boaaxjr70kef0" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
 [ext_resource type="Texture2D" uid="uid://bqki73ib2rdn3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle.png" id="2_4ntmi"]
 [ext_resource type="Texture2D" uid="uid://3tiwpq6y2ghk" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall0.png" id="2_gpjlu"]
+[ext_resource type="Texture2D" uid="uid://bx286m58nlmt8" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash0.png" id="2_sm0op"]
 [ext_resource type="Texture2D" uid="uid://c8xs5w42v7p3l" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall1.png" id="3_8mwp6"]
+[ext_resource type="Texture2D" uid="uid://e8mmwprghly3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash1.png" id="3_76lrf"]
 [ext_resource type="Texture2D" uid="uid://cnysev1lwlp43" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink1.png" id="3_k53q1"]
+[ext_resource type="Texture2D" uid="uid://q5ye8a6hkabw" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash2.png" id="4_efx54"]
 [ext_resource type="Texture2D" uid="uid://dbvphe8i77ej3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink0.png" id="4_fhl08"]
 [ext_resource type="Texture2D" uid="uid://cyief831d3iv3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall2.png" id="4_qemgg"]
 [ext_resource type="Texture2D" uid="uid://skuji30omh7q" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall3.png" id="5_8viyr"]
+[ext_resource type="Texture2D" uid="uid://digj0g0qd5pxl" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash3.png" id="5_755ss"]
 [ext_resource type="Texture2D" uid="uid://chhadxo57q1cu" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink2.png" id="5_vtle1"]
 [ext_resource type="Texture2D" uid="uid://b4ammrdb6osc0" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run0.png" id="6_dkpta"]
 [ext_resource type="Texture2D" uid="uid://diskyjgs7t23" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run1.png" id="7_lfmf2"]
@@ -27,6 +31,23 @@
 [sub_resource type="SpriteFrames" id="SpriteFrames_4ntmi"]
 resource_local_to_scene = true
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_sm0op")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_76lrf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_efx54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_755ss")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("2_gpjlu")
@@ -203,8 +224,8 @@ script = ExtResource("1_4ntmi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
 sprite_frames = SubResource("SpriteFrames_4ntmi")
-animation = &"idle"
-frame_progress = 0.3701247
+animation = &"dash"
+frame_progress = 0.42716545
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
 visible = false
