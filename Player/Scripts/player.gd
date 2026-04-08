@@ -29,6 +29,7 @@ var _queued_attack: bool = false
 var _idle_reference_size: Vector2 = Vector2.ZERO
 var _applied_collision_scene_path: String = ""
 var _collision_bottom_y: float = 0.0
+var _collision_right_x: float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -37,8 +38,10 @@ func _ready() -> void:
 	if collision_shape_node.shape is RectangleShape2D:
 		var start_rect: RectangleShape2D = collision_shape_node.shape
 		_collision_bottom_y = collision_shape_node.position.y + (start_rect.size.y * 0.5)
+		_collision_right_x = collision_shape_node.position.x + (start_rect.size.x * 0.5)
 	else:
 		_collision_bottom_y = collision_shape_node.position.y
+		_collision_right_x = collision_shape_node.position.x
 	_apply_scene_collision_shape()
 	for attack_name in ["attack1", "attack2", "attack3"]:
 		if animated_sprite.sprite_frames.has_animation(attack_name):
@@ -65,18 +68,20 @@ func _apply_scene_collision_shape() -> void:
 	if target_shape != null:
 		collision_shape_node.shape = target_shape
 
-	_apply_collision_height(9.0 if is_room_scene else 16.0)
+	_apply_collision_size(9.0 if is_room_scene else 16.0, 5.0 if is_room_scene else 0.0, 2.0 if is_room_scene else 0.0)
 
 	_applied_collision_scene_path = current_scene_path
 
-func _apply_collision_height(target_height: float) -> void:
+func _apply_collision_size(target_height: float, extra_left_width: float, extra_right_width: float) -> void:
 	if not (collision_shape_node.shape is RectangleShape2D):
 		return
 
 	var source_rect: RectangleShape2D = collision_shape_node.shape
 	var rect_copy: RectangleShape2D = source_rect.duplicate()
+	rect_copy.size.x = source_rect.size.x + extra_left_width + extra_right_width
 	rect_copy.size.y = target_height
 	collision_shape_node.shape = rect_copy
+	collision_shape_node.position.x = (_collision_right_x + extra_right_width) - (rect_copy.size.x * 0.5)
 	collision_shape_node.position.y = _collision_bottom_y - (target_height * 0.5)
 
 func _update_sprite_offset() -> void:
