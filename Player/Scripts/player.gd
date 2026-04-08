@@ -200,13 +200,16 @@ func _physics_process(delta: float) -> void:
 		elif not animated_sprite.is_playing():
 			_stop_attack()
 
-	if attack_just_pressed:
+	if attack_just_pressed and not is_free_move_scene:
 		if _is_attacking:
 			_queued_attack = true
-		elif is_free_move_scene or (_dash_time_left <= 0.0 and _roll_time_left <= 0.0):
+		elif _dash_time_left <= 0.0 and _roll_time_left <= 0.0:
 			_start_attack()
 
 	if is_free_move_scene:
+		if _is_attacking:
+			_stop_attack()
+
 		direction.y = _get_vertical_input()
 		if direction.x != 0.0:
 			_set_facing(direction.x < 0.0)
