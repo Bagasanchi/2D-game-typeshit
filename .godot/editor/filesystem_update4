@@ -1,2 +1,4 @@
 res://Player/player.tscn
 res://Player/Scripts/player.gd
+res://main.tscn
+res://World/Tile maps/room.tscn

@@ -4,12 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://bth7g257kjpp7" path="res://World/Tile maps/AxulArt´s_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt.png" id="2_jjt6p"]
 [ext_resource type="Texture2D" uid="uid://cobemj5jexiiy" path="res://World/Tile maps/AxulArt´s_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_ALL_By_AxulArt.png" id="2_shmfh"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_shmfh"]
-size = Vector2(92.5, 26)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_h4oqt"]
-size = Vector2(36, 32)
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_shmfh"]
 texture = ExtResource("2_jjt6p")
 0:0/0 = 0
@@ -820,20 +814,6 @@ texture = ExtResource("2_jjt6p")
 sources/0 = SubResource("TileSetAtlasSource_qtdrl")
 
 [node name="Node2D" type="Node2D" unique_id=1645551514]
-
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=302756891]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=829300961]
-position = Vector2(133.25, 63)
-shape = SubResource("RectangleShape2D_shmfh")
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1567201669]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=490479806]
-position = Vector2(108, 129)
-shape = SubResource("RectangleShape2D_h4oqt")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1137248203]
 position = Vector2(164, 96)
