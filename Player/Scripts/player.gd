@@ -9,10 +9,14 @@ var move_speed : float = 75.0
 @export var roll_speed: float = 170.0
 @export var roll_duration: float = 0.45
 @export var roll_cooldown: float = 1
+@export var roll_startup_frames: int = 2
+@export_file("*.tscn") var transformed_player_scene_path: String = ""
 @export var default_collision_shape: Shape2D
 @export var room_collision_shape: Shape2D
 @export_file("*.tscn") var free_move_scene_path: String = ""
 @export var attack_offset_x_tweak: float = 10.0
+@export var attack_offset_y_tweak: float = 0.0
+@export var transform_offset_y_tweak: float = 0.0
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape_node: CollisionShape2D = $CollisionShape2D
 var _sprite_base_position: Vector2
@@ -22,7 +26,12 @@ var _dash_direction: float = 1.0
 var _dash_input_was_pressed: bool = false
 var _roll_time_left: float = 0.0
 var _roll_cooldown_left: float = 0.0
+var _roll_startup_time_left: float = 0.0
+var _roll_failsafe_time_left: float = 0.0
 var _roll_direction: float = 1.0
+var _is_rolling: bool = false
+var _is_transforming: bool = false
+var _transform_failsafe_time_left: float = 0.0
 var _is_attacking: bool = false
 var _attack_step: int = 0
 var _queued_attack: bool = false
@@ -46,10 +55,51 @@ func _ready() -> void:
 	for attack_name in ["attack1", "attack2", "attack3"]:
 		if animated_sprite.sprite_frames.has_animation(attack_name):
 			animated_sprite.sprite_frames.set_animation_loop(attack_name, false)
+	if animated_sprite.sprite_frames.has_animation("roll"):
+		animated_sprite.sprite_frames.set_animation_loop("roll", false)
+	if animated_sprite.sprite_frames.has_animation("transform"):
+		animated_sprite.sprite_frames.set_animation_loop("transform", false)
 	if animated_sprite.sprite_frames.has_animation("idle"):
 		var idle_tex: Texture2D = animated_sprite.sprite_frames.get_frame_texture("idle", 0)
 		if idle_tex != null:
 			_idle_reference_size = idle_tex.get_size()
+
+func _get_roll_startup_time() -> float:
+	if roll_startup_frames <= 0 or not animated_sprite.sprite_frames.has_animation("roll"):
+		return 0.0
+
+	var frame_count: int = animated_sprite.sprite_frames.get_frame_count("roll")
+	if frame_count <= 0:
+		return 0.0
+
+	var speed: float = animated_sprite.sprite_frames.get_animation_speed("roll")
+	if speed <= 0.0:
+		return 0.0
+
+	var startup_frame_count: int = mini(roll_startup_frames, frame_count)
+	var startup_time: float = 0.0
+	for i in startup_frame_count:
+		startup_time += animated_sprite.sprite_frames.get_frame_duration("roll", i)
+
+	return startup_time / speed
+
+func _get_animation_length(animation_name: String) -> float:
+	if not animated_sprite.sprite_frames.has_animation(animation_name):
+		return 0.0
+
+	var frame_count: int = animated_sprite.sprite_frames.get_frame_count(animation_name)
+	if frame_count <= 0:
+		return 0.0
+
+	var speed: float = animated_sprite.sprite_frames.get_animation_speed(animation_name)
+	if speed <= 0.0:
+		return 0.0
+
+	var total: float = 0.0
+	for i in frame_count:
+		total += animated_sprite.sprite_frames.get_frame_duration(animation_name, i)
+
+	return total / speed
 
 func _apply_scene_collision_shape() -> void:
 	var current_scene: Node = get_tree().current_scene
@@ -90,7 +140,8 @@ func _update_sprite_offset() -> void:
 		return
 
 	var anim_name: String = String(animated_sprite.animation)
-	if not anim_name.begins_with("attack"):
+	var needs_alignment: bool = anim_name.begins_with("attack") or anim_name == "transform"
+	if not needs_alignment:
 		animated_sprite.offset = Vector2.ZERO
 		return
 
@@ -106,17 +157,86 @@ func _update_sprite_offset() -> void:
 		return
 
 	var current_size: Vector2 = current_tex.get_size()
-	# Keep vertical alignment stable and apply a tiny horizontal nudge for attack frame alignment.
-	var x_offset: float = attack_offset_x_tweak
-	if animated_sprite.flip_h:
-		x_offset = -x_offset
+	# Keep vertical alignment stable for varying frame sizes.
+	var x_offset: float = 0.0
+	if anim_name.begins_with("attack"):
+		# Attack frames need a tiny horizontal nudge for weapon alignment.
+		x_offset = attack_offset_x_tweak
+		if animated_sprite.flip_h:
+			x_offset = -x_offset
 	var y_offset: float = (_idle_reference_size.y - current_size.y) * 0.5
+	if anim_name.begins_with("attack"):
+		y_offset += attack_offset_y_tweak
+	elif anim_name == "transform":
+		y_offset += transform_offset_y_tweak
 	animated_sprite.offset = Vector2(x_offset, y_offset)
 
 func _stop_attack() -> void:
 	_is_attacking = false
 	_attack_step = 0
 	_queued_attack = false
+
+func _perform_transform_swap() -> void:
+	if transformed_player_scene_path.is_empty():
+		_is_transforming = false
+		_transform_failsafe_time_left = 0.0
+		return
+
+	var next_scene: PackedScene = load(transformed_player_scene_path) as PackedScene
+	if next_scene == null:
+		_is_transforming = false
+		_transform_failsafe_time_left = 0.0
+		return
+
+	var parent: Node = get_parent()
+	if parent == null:
+		_is_transforming = false
+		_transform_failsafe_time_left = 0.0
+		return
+
+	var child_index: int = get_index()
+	var previous_transform: Transform2D = global_transform
+	var previous_velocity: Vector2 = velocity
+	var previous_flip_h: bool = animated_sprite.flip_h
+
+	var spawned: Node = next_scene.instantiate()
+	if spawned == null:
+		_is_transforming = false
+		_transform_failsafe_time_left = 0.0
+		return
+
+	parent.add_child(spawned)
+	parent.move_child(spawned, child_index)
+
+	if spawned is Node2D:
+		(spawned as Node2D).global_transform = previous_transform
+
+	if spawned is CharacterBody2D:
+		(spawned as CharacterBody2D).velocity = previous_velocity
+
+	if spawned.has_node("AnimatedSprite2D"):
+		var spawned_sprite: AnimatedSprite2D = spawned.get_node("AnimatedSprite2D") as AnimatedSprite2D
+		if spawned_sprite != null:
+			spawned_sprite.flip_h = previous_flip_h
+
+	queue_free()
+
+func _start_transform() -> void:
+	if transformed_player_scene_path.is_empty():
+		return
+
+	_is_transforming = true
+	_roll_time_left = 0.0
+	_roll_startup_time_left = 0.0
+	_roll_failsafe_time_left = 0.0
+	_dash_time_left = 0.0
+	_stop_attack()
+
+	if animated_sprite.sprite_frames.has_animation("transform"):
+		animated_sprite.play("transform")
+		_transform_failsafe_time_left = max(0.05, _get_animation_length("transform") + 0.1)
+	else:
+		_perform_transform_swap()
 
 func _start_attack() -> void:
 	if not animated_sprite.sprite_frames.has_animation("attack1"):
@@ -127,6 +247,17 @@ func _start_attack() -> void:
 	animated_sprite.play("attack1")
 
 func _on_animation_finished() -> void:
+	if animated_sprite.animation == "transform" and _is_transforming:
+		_perform_transform_swap()
+		return
+
+	if animated_sprite.animation == "roll":
+		_is_rolling = false
+		_roll_time_left = 0.0
+		_roll_startup_time_left = 0.0
+		_roll_failsafe_time_left = 0.0
+		return
+
 	if not _is_attacking:
 		return
 
@@ -189,10 +320,43 @@ func _physics_process(delta: float) -> void:
 	_dash_input_was_pressed = dash_input_pressed
 	var roll_just_pressed := Input.is_action_just_pressed("roll")
 	var attack_just_pressed := Input.is_action_just_pressed("attack")
+	var transform_just_pressed := Input.is_action_just_pressed("transform")
 	_dash_time_left = max(_dash_time_left - delta, 0.0)
 	_dash_cooldown_left = max(_dash_cooldown_left - delta, 0.0)
 	_roll_time_left = max(_roll_time_left - delta, 0.0)
+	_roll_startup_time_left = max(_roll_startup_time_left - delta, 0.0)
+	_roll_failsafe_time_left = max(_roll_failsafe_time_left - delta, 0.0)
+	_transform_failsafe_time_left = max(_transform_failsafe_time_left - delta, 0.0)
 	_roll_cooldown_left = max(_roll_cooldown_left - delta, 0.0)
+
+	if _is_rolling and _roll_failsafe_time_left <= 0.0:
+		_is_rolling = false
+		_roll_time_left = 0.0
+		_roll_startup_time_left = 0.0
+
+	if _is_transforming and _transform_failsafe_time_left <= 0.0:
+		_perform_transform_swap()
+		return
+
+	if transform_just_pressed and not _is_transforming and _dash_time_left <= 0.0 and not _is_rolling:
+		_start_transform()
+
+	if _is_transforming:
+		velocity.x = 0.0
+		if not is_on_floor():
+			velocity.y += gravity * delta
+		else:
+			velocity.y = 0.0
+
+		if animated_sprite.sprite_frames.has_animation("transform"):
+			if animated_sprite.animation != "transform" or not animated_sprite.is_playing():
+				animated_sprite.play("transform")
+		else:
+			animated_sprite.play("idle")
+
+		_update_sprite_offset()
+		move_and_slide()
+		return
 
 	if _is_attacking:
 		if not animated_sprite.animation.begins_with("attack"):
@@ -200,13 +364,16 @@ func _physics_process(delta: float) -> void:
 		elif not animated_sprite.is_playing():
 			_stop_attack()
 
-	if attack_just_pressed:
+	if attack_just_pressed and not is_free_move_scene:
 		if _is_attacking:
 			_queued_attack = true
-		elif is_free_move_scene or (_dash_time_left <= 0.0 and _roll_time_left <= 0.0):
+		elif _dash_time_left <= 0.0 and not _is_rolling:
 			_start_attack()
 
 	if is_free_move_scene:
+		if _is_attacking:
+			_stop_attack()
+
 		direction.y = _get_vertical_input()
 		if direction.x != 0.0:
 			_set_facing(direction.x < 0.0)
@@ -227,7 +394,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	if direction.x != 0.0 and _roll_time_left <= 0.0:
+	if direction.x != 0.0 and not _is_rolling:
 		_set_facing(direction.x < 0.0)
 
 	if dash_just_pressed and _dash_time_left <= 0.0 and _dash_cooldown_left <= 0.0:
@@ -235,16 +402,20 @@ func _physics_process(delta: float) -> void:
 		_dash_time_left = dash_duration
 		_dash_cooldown_left = dash_cooldown
 
-	if roll_just_pressed and is_on_floor() and _dash_time_left <= 0.0 and _roll_time_left <= 0.0 and _roll_cooldown_left <= 0.0:
+	if roll_just_pressed and is_on_floor() and _dash_time_left <= 0.0 and not _is_rolling and _roll_cooldown_left <= 0.0:
 		_roll_direction = sign(direction.x) if direction.x != 0.0 else (-1.0 if animated_sprite.flip_h else 1.0)
+		_is_rolling = true
 		_roll_time_left = roll_duration
+		_roll_startup_time_left = min(_get_roll_startup_time(), _roll_time_left)
+		_roll_failsafe_time_left = max(_get_animation_length("roll") + 0.05, roll_duration + 0.05)
 		_roll_cooldown_left = roll_cooldown
 
 	if _dash_time_left > 0.0:
 		velocity.x = _dash_direction * dash_speed
 		velocity.y = 0.0
-	elif _roll_time_left > 0.0:
-		velocity.x = _roll_direction * roll_speed
+	elif _is_rolling:
+		var roll_can_move: bool = _roll_time_left > 0.0 and _roll_startup_time_left <= 0.0
+		velocity.x = _roll_direction * roll_speed if roll_can_move else 0.0
 		if not is_on_floor():
 			velocity.y += gravity * delta
 		else:
@@ -268,9 +439,10 @@ func _physics_process(delta: float) -> void:
 			animated_sprite.play("dash")
 		else:
 			animated_sprite.play("run")
-	elif _roll_time_left > 0.0:
+	elif _is_rolling:
 		if animated_sprite.sprite_frames.has_animation("roll"):
-			animated_sprite.play("roll")
+			if animated_sprite.animation != "roll" or not animated_sprite.is_playing():
+				animated_sprite.play("roll")
 		else:
 			animated_sprite.play("run")
 	elif _is_attacking:
