@@ -76,15 +76,16 @@ shape = SubResource("CircleShape2D_n175u")
 layer = 5
 
 [node name="PressEButton" type="Button" parent="PromptCanvasLayer" unique_id=1821361572]
-anchors_preset = 7
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.892
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -34.0
-offset_top = -24.0
-offset_right = 34.0
-offset_bottom = -4.0
+anchor_bottom = 0.892
+offset_left = -18.0
+offset_top = -10.559998
+offset_right = 18.0
+offset_bottom = 9.440002
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_font_sizes/font_size = 8
 text = "Press e"
