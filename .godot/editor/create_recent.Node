@@ -1,4 +1,6 @@
-StaticBody2D
+TileMapLayer
 CollisionShape2D
+StaticBody2D
+TileMap
 Sprite2D
 AnimationPlayer
