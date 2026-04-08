@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ig7tw"]
 size = Vector2(576, 162)
 
-[node name="Node2D" type="Node2D" unique_id=594301692]
+[node name="Node2D2" type="Node2D" unique_id=594301692]
 
 [node name="Player" parent="." unique_id=1677022981 instance=ExtResource("1_ig7tw")]
 position = Vector2(152, 89)
