@@ -1,4 +1,4 @@
-res://Player/player.tscn
-res://Player/Scripts/player.gd
-res://main.tscn
 res://World/Tile maps/room.tscn
+res://Player/player.tscn
+res://Player/player_1.tscn
+res://Player/Scripts/player.gd
