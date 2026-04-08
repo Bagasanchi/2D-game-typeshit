@@ -108,6 +108,8 @@ func _update_sprite_offset() -> void:
 	var current_size: Vector2 = current_tex.get_size()
 	# Keep vertical alignment stable and apply a tiny horizontal nudge for attack frame alignment.
 	var x_offset: float = attack_offset_x_tweak
+	if animated_sprite.flip_h:
+		x_offset = -x_offset
 	var y_offset: float = (_idle_reference_size.y - current_size.y) * 0.5
 	animated_sprite.offset = Vector2(x_offset, y_offset)
 
