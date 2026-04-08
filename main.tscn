@@ -8,12 +8,17 @@ size = Vector2(576, 162)
 
 [node name="Node2D" type="Node2D" unique_id=594301692]
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=1677022981 instance=ExtResource("1_ig7tw")]
-position = Vector2(282, 167)
-script = ExtResource("2_0xm2m")
+[node name="Player" parent="." unique_id=1677022981 instance=ExtResource("1_ig7tw")]
+position = Vector2(286, 147)
 
 [node name="TestMap2D" type="StaticBody2D" parent="." unique_id=1514964059]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestMap2D" unique_id=658062681]
 position = Vector2(288, 243)
+shape = SubResource("RectangleShape2D_ig7tw")
+
+[node name="TestMap2D2" type="StaticBody2D" parent="." unique_id=127433841]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestMap2D2" unique_id=704768640]
+position = Vector2(-17, 210)
 shape = SubResource("RectangleShape2D_ig7tw")
