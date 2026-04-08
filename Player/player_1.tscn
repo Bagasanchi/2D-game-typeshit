@@ -529,8 +529,7 @@ metadata/_custom_type_script = "uid://boaaxjr70kef0"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=428062166]
 sprite_frames = SubResource("SpriteFrames_iiypf")
-animation = &"transform"
-frame_progress = 0.20602222
+animation = &"attack1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2117101947]
 visible = false

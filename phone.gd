@@ -41,11 +41,11 @@ func _interact_with_phone() -> void:
 	interacted.emit(_player_in_range)
 	print("Phone interaction triggered")
 
-func _set_prompt_visible(is_visible: bool) -> void:
-	press_e_button.visible = is_visible
-	press_e_button.disabled = not is_visible
+func _set_prompt_visible(visible_state: bool) -> void:
+	press_e_button.visible = visible_state
+	press_e_button.disabled = not visible_state
 
-	if is_visible:
+	if visible_state:
 		press_e_button.grab_focus()
 	elif press_e_button.has_focus():
 		press_e_button.release_focus()
