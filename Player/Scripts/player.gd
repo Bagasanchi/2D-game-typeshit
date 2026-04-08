@@ -56,7 +56,10 @@ func _physics_process(delta: float) -> void:
 		velocity.y = 0.0
 	elif _roll_time_left > 0.0:
 		velocity.x = _roll_direction * roll_speed
-		velocity.y = 0.0
+		if not is_on_floor():
+			velocity.y += gravity * delta
+		else:
+			velocity.y = 0.0
 	else:
 		velocity.x = direction.x * move_speed
 
