@@ -430,6 +430,7 @@ size = Vector2(9, 17)
 
 [node name="Player" type="CharacterBody2D" unique_id=1677022981]
 script = ExtResource("1_4ntmi")
+gravity = 750.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
 sprite_frames = SubResource("SpriteFrames_4ntmi")
