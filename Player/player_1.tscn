@@ -523,14 +523,13 @@ size = Vector2(9, 16)
 [node name="Player1" type="CharacterBody2D" unique_id=1479950729]
 script = ExtResource("1_22iwe")
 transformed_player_scene_path = "res://Player/player.tscn"
-attack_offset_y_tweak = 3.5
+attack_offset_y_tweak = 5.0
 transform_offset_y_tweak = 2.0
 metadata/_custom_type_script = "uid://boaaxjr70kef0"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=428062166]
 sprite_frames = SubResource("SpriteFrames_iiypf")
-animation = &"transform"
-frame_progress = 0.20602222
+animation = &"attack1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2117101947]
 visible = false

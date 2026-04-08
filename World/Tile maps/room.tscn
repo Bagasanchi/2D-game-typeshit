@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dwi18i76rjai6" path="res://Player/player.tscn" id="1_ent10"]
 [ext_resource type="Texture2D" uid="uid://bth7g257kjpp7" path="res://World/Tile maps/AxulArt´s_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt.png" id="2_jjt6p"]
 [ext_resource type="Texture2D" uid="uid://cobemj5jexiiy" path="res://World/Tile maps/AxulArt´s_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_ALL_By_AxulArt.png" id="2_shmfh"]
-[ext_resource type="PackedScene" uid="uid://cm13axtfk7nos" path="res://phone.tscn" id="3_h4oqt"]
+[ext_resource type="PackedScene" path="res://phone.tscn" id="3_h4oqt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_shmfh"]
 texture = ExtResource("2_jjt6p")
@@ -818,7 +818,7 @@ sources/0 = SubResource("TileSetAtlasSource_qtdrl")
 a = Vector2(228, 42)
 b = Vector2(228, 152)
 
-[node name="Node2D" type="Node2D" unique_id=1645551514]
+[node name="Node2D2" type="Node2D" unique_id=1645551514]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1137248203]
 position = Vector2(164, 96)
