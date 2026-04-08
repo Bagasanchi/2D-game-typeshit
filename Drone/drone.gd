@@ -3,6 +3,9 @@ extends Node2D
 @export var is_alive: bool = true
 @export var follow_target_path: NodePath = NodePath("../Player")
 @export var follow_speed: float = 165.0
+@export var follow_acceleration: float = 260.0
+@export var follow_deceleration: float = 170.0
+@export var follow_arrive_gain: float = 4.0
 @export var follow_start_distance: float = 34.0
 @export var follow_stop_distance: float = 16.0
 @export var follow_behind_distance: float = 20.0
@@ -14,6 +17,7 @@ extends Node2D
 var _follow_target: Node2D
 var _is_following: bool = false
 var _behind_direction_x: float = 1.0
+var _follow_velocity: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	_resolve_follow_target()
@@ -43,22 +47,13 @@ func _physics_process(delta: float) -> void:
 		if player_distance >= start_distance or desired_distance >= turn_reposition_distance:
 			_is_following = true
 
-	if not _is_following:
-		return
+	if _is_following:
+		_apply_follow_velocity(desired_position, delta)
+	else:
+		_apply_idle_slide(delta)
 
-	var to_target: Vector2 = desired_position - global_position
-	var distance: float = to_target.length()
-	if distance <= 0.001:
-		return
-
-	var move_distance: float = minf(distance, follow_speed * delta)
-	if move_distance <= 0.0:
-		return
-
-	global_position += to_target / distance * move_distance
-
-	if absf(to_target.x) > 0.01:
-		animated_sprite.flip_h = to_target.x < 0.0
+	if absf(_follow_velocity.x) > 0.01:
+		animated_sprite.flip_h = _follow_velocity.x > 0.0
 
 func set_alive(value: bool) -> void:
 	is_alive = value
@@ -164,6 +159,26 @@ func _get_desired_follow_position() -> Vector2:
 		return global_position
 
 	return _follow_target.global_position + Vector2(-_behind_direction_x * follow_behind_distance, follow_vertical_offset)
+
+func _apply_follow_velocity(desired_position: Vector2, delta: float) -> void:
+	var to_target: Vector2 = desired_position - global_position
+	var distance: float = to_target.length()
+	if distance <= 0.001:
+		_apply_idle_slide(delta)
+		return
+
+	var desired_speed: float = minf(follow_speed, distance * follow_arrive_gain)
+	var desired_velocity: Vector2 = to_target / distance * desired_speed
+	_follow_velocity = _follow_velocity.move_toward(desired_velocity, follow_acceleration * delta)
+	global_position += _follow_velocity * delta
+
+func _apply_idle_slide(delta: float) -> void:
+	_follow_velocity = _follow_velocity.move_toward(Vector2.ZERO, follow_deceleration * delta)
+	if _follow_velocity.length_squared() <= 0.0001:
+		_follow_velocity = Vector2.ZERO
+		return
+
+	global_position += _follow_velocity * delta
 
 func _update_animation() -> void:
 	if animated_sprite == null:
