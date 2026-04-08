@@ -1,0 +1,442 @@
+[gd_scene format=3 uid="uid://dwi18i76rjai6"]
+
+[ext_resource type="Script" uid="uid://boaaxjr70kef0" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://6h8usbao1qsb" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_0.png" id="2_2krxc"]
+[ext_resource type="Texture2D" uid="uid://bqki73ib2rdn3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle.png" id="2_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://3tiwpq6y2ghk" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall0.png" id="2_gpjlu"]
+[ext_resource type="Texture2D" uid="uid://bx286m58nlmt8" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash0.png" id="2_sm0op"]
+[ext_resource type="Texture2D" uid="uid://c8xs5w42v7p3l" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall1.png" id="3_8mwp6"]
+[ext_resource type="Texture2D" uid="uid://e8mmwprghly3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash1.png" id="3_76lrf"]
+[ext_resource type="Texture2D" uid="uid://cnysev1lwlp43" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink1.png" id="3_k53q1"]
+[ext_resource type="Texture2D" uid="uid://3hfmndc7s681" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_1.png" id="3_mw2es"]
+[ext_resource type="Texture2D" uid="uid://q5ye8a6hkabw" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash2.png" id="4_efx54"]
+[ext_resource type="Texture2D" uid="uid://dbvphe8i77ej3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink0.png" id="4_fhl08"]
+[ext_resource type="Texture2D" uid="uid://n8wjt58krf8r" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_2.png" id="4_p7odc"]
+[ext_resource type="Texture2D" uid="uid://cyief831d3iv3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall2.png" id="4_qemgg"]
+[ext_resource type="Texture2D" uid="uid://skuji30omh7q" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/fall/fall3.png" id="5_8viyr"]
+[ext_resource type="Texture2D" uid="uid://digj0g0qd5pxl" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/dash/dash3.png" id="5_755ss"]
+[ext_resource type="Texture2D" uid="uid://cry4gxuab3c11" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_3.png" id="5_beqdq"]
+[ext_resource type="Texture2D" uid="uid://chhadxo57q1cu" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/idle_blink/idle_blink2.png" id="5_vtle1"]
+[ext_resource type="Texture2D" uid="uid://b4ammrdb6osc0" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run0.png" id="6_dkpta"]
+[ext_resource type="Texture2D" uid="uid://dycvqexkks33r" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_4.png" id="6_get7g"]
+[ext_resource type="Texture2D" uid="uid://diskyjgs7t23" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run1.png" id="7_lfmf2"]
+[ext_resource type="Texture2D" uid="uid://cke0si727bphc" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_5.png" id="7_pfstq"]
+[ext_resource type="Texture2D" uid="uid://cajccp4mmfm7" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run2.png" id="8_pisgm"]
+[ext_resource type="Texture2D" uid="uid://bt4xllvymotwp" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_6.png" id="8_tklvp"]
+[ext_resource type="Texture2D" uid="uid://bfsiqhdgea53r" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run3.png" id="9_b1ygp"]
+[ext_resource type="Texture2D" uid="uid://4jdgg2mkewbk" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_7.png" id="9_gv7t5"]
+[ext_resource type="Texture2D" uid="uid://33bgw35cbdg0" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_8.png" id="10_hhxpw"]
+[ext_resource type="Texture2D" uid="uid://btpl6ur7hqaqr" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run4.png" id="10_o28un"]
+[ext_resource type="Texture2D" uid="uid://clq5q7uhmdc2t" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump0.png" id="10_sm0op"]
+[ext_resource type="Texture2D" uid="uid://ghm3kdghbjhg" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump1.png" id="11_76lrf"]
+[ext_resource type="Texture2D" uid="uid://bwwe0420nq32l" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/attack1/attack1_9.png" id="11_ghd3c"]
+[ext_resource type="Texture2D" uid="uid://bb6wf2aaals0l" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run5.png" id="11_n471f"]
+[ext_resource type="Texture2D" uid="uid://whhnho07wxyg" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run6.png" id="12_7emwf"]
+[ext_resource type="Texture2D" uid="uid://myqhwmjh4go3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump2.png" id="12_efx54"]
+[ext_resource type="Texture2D" uid="uid://bowrx5meu357n" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/jump/jump3.png" id="13_755ss"]
+[ext_resource type="Texture2D" uid="uid://l1q24iy2e11q" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run7.png" id="13_hshwv"]
+[ext_resource type="Texture2D" uid="uid://bevcgxykaau3y" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run8.png" id="14_gpjlu"]
+[ext_resource type="Texture2D" uid="uid://c6f67v08ogeu1" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/run/run9.png" id="15_8mwp6"]
+[ext_resource type="Texture2D" uid="uid://dt8561kfksxbx" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll0.png" id="18_6rl0i"]
+[ext_resource type="Texture2D" uid="uid://dmxwl7qsj82i5" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll1.png" id="19_7x5p2"]
+[ext_resource type="Texture2D" uid="uid://2swfrwd1lvw3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll2.png" id="20_6eb1q"]
+[ext_resource type="Texture2D" uid="uid://cwea724774pm7" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll3.png" id="21_wvbyc"]
+[ext_resource type="Texture2D" uid="uid://dm07ptfri2o6j" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll4.png" id="22_gvnt1"]
+[ext_resource type="Texture2D" uid="uid://c4q8dyahsmm7c" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll5.png" id="23_1kmt7"]
+[ext_resource type="Texture2D" uid="uid://bjuq76jrfrkk3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll6.png" id="24_c4i3b"]
+[ext_resource type="Texture2D" uid="uid://c5fdbwaho2j56" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll7.png" id="25_uvbbp"]
+[ext_resource type="Texture2D" uid="uid://1iyxbn48cxe4" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll8.png" id="26_7v2uk"]
+[ext_resource type="Texture2D" uid="uid://iovxtfiupb05" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll9.png" id="27_m6nl3"]
+[ext_resource type="Texture2D" uid="uid://bhp8pltqa44hk" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll10.png" id="28_8hx1r"]
+[ext_resource type="Texture2D" uid="uid://dr8nf35p6ew60" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll11.png" id="29_qas3k"]
+[ext_resource type="Texture2D" uid="uid://dewcnli1mwlsw" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll12.png" id="30_ntwt4"]
+[ext_resource type="Texture2D" uid="uid://dijj47vm85bxn" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll13.png" id="31_kdg72"]
+[ext_resource type="Texture2D" uid="uid://c36ue0qyb7frh" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll14.png" id="32_qpoj2"]
+[ext_resource type="Texture2D" uid="uid://cmhrlmekay73x" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll15.png" id="33_3e3ym"]
+[ext_resource type="Texture2D" uid="uid://en8fw6oogbgx" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll16.png" id="34_gxi5p"]
+[ext_resource type="Texture2D" uid="uid://cyjgrc6mfksla" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll17.png" id="35_yxu6j"]
+[ext_resource type="Texture2D" uid="uid://jievpms0tlxc" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll18.png" id="36_mdkl3"]
+[ext_resource type="Texture2D" uid="uid://myg0iokyehie" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/roll/roll19.png" id="37_68syb"]
+[ext_resource type="Texture2D" uid="uid://wntvkb2lqkbc" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform0.png" id="48_k84o0"]
+[ext_resource type="Texture2D" uid="uid://l7m1jiblyxau" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform1.png" id="49_vx8o5"]
+[ext_resource type="Texture2D" uid="uid://cwblq64mh7mha" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform2.png" id="50_w5pua"]
+[ext_resource type="Texture2D" uid="uid://lh2x5dpm8cb7" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform3.png" id="51_ca054"]
+[ext_resource type="Texture2D" uid="uid://c5bmuk6dmr516" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform4.png" id="52_6xaqw"]
+[ext_resource type="Texture2D" uid="uid://ddp3e0w4co4j6" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform5.png" id="53_skhd2"]
+[ext_resource type="Texture2D" uid="uid://c3cfi8yiala2n" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform6.png" id="54_ppx2g"]
+[ext_resource type="Texture2D" uid="uid://bodkdvi63rfiq" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform7.png" id="55_0f4m7"]
+[ext_resource type="Texture2D" uid="uid://bgf24te00mssb" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform8.png" id="56_c7st8"]
+[ext_resource type="Texture2D" uid="uid://du0pmmhccd2kr" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform9.png" id="57_i8h25"]
+[ext_resource type="Texture2D" uid="uid://dn7kxhspgy3mx" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform10.png" id="58_2krxc"]
+[ext_resource type="Texture2D" uid="uid://bq80nasmuio7j" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform11.png" id="59_mw2es"]
+[ext_resource type="Texture2D" uid="uid://ceuwtscio4445" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform12.png" id="60_p7odc"]
+[ext_resource type="Texture2D" uid="uid://cs0dxcehgktv0" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform13.png" id="61_beqdq"]
+[ext_resource type="Texture2D" uid="uid://c6ud4syd0k4pe" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform14.png" id="62_get7g"]
+[ext_resource type="Texture2D" uid="uid://c384kjoa0ctwm" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform15.png" id="63_pfstq"]
+[ext_resource type="Texture2D" uid="uid://c2li7no783ybj" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform16.png" id="64_tklvp"]
+[ext_resource type="Texture2D" uid="uid://clt8godaxnoun" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform17.png" id="65_gv7t5"]
+[ext_resource type="Texture2D" uid="uid://bovccgk3sgiav" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform18.png" id="66_hhxpw"]
+[ext_resource type="Texture2D" uid="uid://dwec6p7c671wi" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform19.png" id="67_ghd3c"]
+[ext_resource type="Texture2D" uid="uid://cnl28umeuo33a" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform20.png" id="68_tea4v"]
+[ext_resource type="Texture2D" uid="uid://dpv7kcgd0qvfd" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform21.png" id="69_htm5v"]
+[ext_resource type="Texture2D" uid="uid://d0jbf8wjd5qpj" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform22.png" id="70_k5lso"]
+[ext_resource type="Texture2D" uid="uid://ci3346v7y4v0r" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform23.png" id="71_rgyuq"]
+[ext_resource type="Texture2D" uid="uid://j8kiq7iyhrkl" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform24.png" id="72_pnkso"]
+[ext_resource type="Texture2D" uid="uid://c8aauy3sgf43i" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform25.png" id="73_kdbu6"]
+[ext_resource type="Texture2D" uid="uid://dwgn3vxlehipn" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform26.png" id="74_ktlni"]
+[ext_resource type="Texture2D" uid="uid://d0vk1ih33877m" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform27.png" id="75_knoy1"]
+[ext_resource type="Texture2D" uid="uid://buh1l3iq56uj4" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform28.png" id="76_wxx1a"]
+[ext_resource type="Texture2D" uid="uid://cywa4mq836nhp" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform29.png" id="77_6kee4"]
+[ext_resource type="Texture2D" uid="uid://r77yhmo1rki4" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform30.png" id="78_yarqk"]
+[ext_resource type="Texture2D" uid="uid://dckvbd52wunx3" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform31.png" id="79_ns2jh"]
+[ext_resource type="Texture2D" uid="uid://btgr3k77t4glv" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform32.png" id="80_pwrp6"]
+[ext_resource type="Texture2D" uid="uid://chpct4g2tmsst" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform33.png" id="81_qh5jn"]
+[ext_resource type="Texture2D" uid="uid://dvqtfm3dene56" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform34.png" id="82_b8amp"]
+[ext_resource type="Texture2D" uid="uid://bjv4ptyh8j2f0" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform35.png" id="83_t6vuh"]
+[ext_resource type="Texture2D" uid="uid://dm3bd84o2bhk8" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform36.png" id="84_sbtcc"]
+[ext_resource type="Texture2D" uid="uid://bprr4ryf3m3gp" path="res://Player/Sprites/AssetPack 20 DANG DOLLARS BRO/AssetPack/Light/transform/transform37.png" id="85_t504k"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4ntmi"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2krxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_mw2es")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_p7odc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_beqdq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_get7g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_pfstq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tklvp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_gv7t5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_hhxpw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ghd3c")
+}],
+"loop": true,
+"name": &"attack1",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_sm0op")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_76lrf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_efx54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_755ss")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_gpjlu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_8mwp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qemgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_8viyr")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 20.0,
+"texture": ExtResource("2_4ntmi")
+}, {
+"duration": 0.5,
+"texture": ExtResource("3_k53q1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_fhl08")
+}, {
+"duration": 0.5,
+"texture": ExtResource("3_k53q1")
+}, {
+"duration": 20.0,
+"texture": ExtResource("5_vtle1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_sm0op")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_76lrf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_efx54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_755ss")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_6rl0i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_7x5p2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_6eb1q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_wvbyc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_gvnt1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_1kmt7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_c4i3b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_uvbbp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_7v2uk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_m6nl3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_8hx1r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_qas3k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ntwt4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_kdg72")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_qpoj2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_3e3ym")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_gxi5p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_yxu6j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_mdkl3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_68syb")
+}],
+"loop": true,
+"name": &"roll",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_dkpta")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_lfmf2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_pisgm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_b1ygp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_o28un")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_n471f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_7emwf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_hshwv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_gpjlu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_8mwp6")
+}],
+"loop": true,
+"name": &"run",
+"speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("48_k84o0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_vx8o5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_w5pua")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_ca054")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_6xaqw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_skhd2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_ppx2g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_0f4m7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_c7st8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_i8h25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_2krxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_mw2es")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_p7odc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_beqdq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_get7g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_pfstq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_tklvp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_gv7t5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_hhxpw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_ghd3c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_tea4v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_htm5v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_k5lso")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_rgyuq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_pnkso")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_kdbu6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_ktlni")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_knoy1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_wxx1a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_6kee4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_yarqk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_ns2jh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_pwrp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_qh5jn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_b8amp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_t6vuh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_sbtcc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_t504k")
+}],
+"loop": true,
+"name": &"transform",
+"speed": 13.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_btcbx"]
+size = Vector2(9, 17)
+
+[node name="Player" type="CharacterBody2D" unique_id=1677022981]
+script = ExtResource("1_4ntmi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
+sprite_frames = SubResource("SpriteFrames_4ntmi")
+animation = &"idle"
+frame_progress = 0.6733828
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632832988]
+visible = false
+position = Vector2(1.5, 0.5)
+shape = SubResource("RectangleShape2D_btcbx")
