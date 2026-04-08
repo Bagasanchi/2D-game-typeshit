@@ -4,6 +4,7 @@ signal interacted(player)
 
 @onready var interact_area: Area2D = $InteractArea
 @onready var press_e_button: Button = $PromptCanvasLayer/PressEButton
+@onready var phone_screen_root: Control = $PhoneScreenLayer/PhoneScreenRoot
 
 var _player_in_range: Player = null
 
@@ -14,6 +15,11 @@ func _ready() -> void:
 	_set_prompt_visible(false)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if phone_screen_root.visible and (event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel")):
+		_set_phone_screen_visible(false)
+		get_viewport().set_input_as_handled()
+		return
+
 	if _player_in_range == null:
 		return
 
@@ -39,7 +45,7 @@ func _interact_with_phone() -> void:
 		return
 
 	interacted.emit(_player_in_range)
-	print("Phone interaction triggered")
+	_set_phone_screen_visible(true)
 
 func _set_prompt_visible(visible_state: bool) -> void:
 	press_e_button.visible = visible_state
@@ -49,3 +55,6 @@ func _set_prompt_visible(visible_state: bool) -> void:
 		press_e_button.grab_focus()
 	elif press_e_button.has_focus():
 		press_e_button.release_focus()
+
+func _set_phone_screen_visible(visible_state: bool) -> void:
+	phone_screen_root.visible = visible_state

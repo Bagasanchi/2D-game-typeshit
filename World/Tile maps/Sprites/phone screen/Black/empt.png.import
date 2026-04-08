@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dd8oe3mgwmens"
-path="res://.godot/imported/front.png-97e925bc9cadf013dda3b633c20106f0.ctex"
+uid="uid://c42w1wmdq3wle"
+path="res://.godot/imported/empt.png-98e7619461c4a58e4849bd5c60b47bcc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://World/Tile maps/Sprites/phone screen/Black/front.png"
-dest_files=["res://.godot/imported/front.png-97e925bc9cadf013dda3b633c20106f0.ctex"]
+source_file="res://World/Tile maps/Sprites/phone screen/Black/empt.png"
+dest_files=["res://.godot/imported/empt.png-98e7619461c4a58e4849bd5c60b47bcc.ctex"]
 
 [params]
 
