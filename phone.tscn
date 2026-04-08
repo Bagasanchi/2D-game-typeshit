@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://cm13axtfk7nos"]
+
+[ext_resource type="Texture2D" uid="uid://clau6wy7o27eb" path="res://World/Tile maps/Sprites/phone small/phone_small1.png" id="1_o2tev"]
+[ext_resource type="Texture2D" uid="uid://b1cyuf5fkvwai" path="res://World/Tile maps/Sprites/phone small/phone_small2.png" id="2_4e1hp"]
+[ext_resource type="Texture2D" uid="uid://dy74w8fd8agh0" path="res://World/Tile maps/Sprites/phone small/phone_small3.png" id="3_r4c4o"]
+[ext_resource type="Texture2D" uid="uid://dp1ich7lgqckl" path="res://World/Tile maps/Sprites/phone small/phone_small4.png" id="4_i5kia"]
+[ext_resource type="Texture2D" uid="uid://jg45e3qxaa1b" path="res://World/Tile maps/Sprites/phone small/phone_small5.png" id="5_o8kak"]
+[ext_resource type="Texture2D" uid="uid://dbncpk3oldar6" path="res://World/Tile maps/Sprites/phone small/phone_small6.png" id="6_j06my"]
+[ext_resource type="Texture2D" uid="uid://8bmjaiupouqk" path="res://World/Tile maps/Sprites/phone small/phone_small7.png" id="7_ast13"]
+[ext_resource type="Texture2D" uid="uid://c1o0qebxqtijk" path="res://World/Tile maps/Sprites/phone small/phone_small8.png" id="8_1g6qh"]
+[ext_resource type="Texture2D" uid="uid://mplm1alm2b5u" path="res://World/Tile maps/Sprites/phone small/phone_small9.png" id="9_xgb3p"]
+[ext_resource type="Texture2D" uid="uid://cf6g53iuq137" path="res://World/Tile maps/Sprites/phone small/phone_small10.png" id="10_qxbm5"]
+[ext_resource type="Texture2D" uid="uid://7x3cvdjaj3u2" path="res://World/Tile maps/Sprites/phone small/phone_small11.png" id="11_n3uuv"]
+[ext_resource type="Script" uid="uid://d0o74xm8bxo7w" path="res://phone.gd" id="12_psg0x"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ntkgg"]
+animations = [{
+"frames": [{
+"duration": 13.0,
+"texture": ExtResource("1_o2tev")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_4e1hp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_r4c4o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_i5kia")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_o8kak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_j06my")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ast13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_1g6qh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_xgb3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_qxbm5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_n3uuv")
+}],
+"loop": true,
+"name": &"vibrate",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n175u"]
+radius = 16.0
+
+[node name="Node2D" type="Node2D" unique_id=625911460]
+script = ExtResource("12_psg0x")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=574560891]
+sprite_frames = SubResource("SpriteFrames_ntkgg")
+animation = &"vibrate"
+autoplay = "vibrate"
+frame_progress = 0.7011876
+
+[node name="InteractArea" type="Area2D" parent="." unique_id=1570804303]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=758190815]
+shape = SubResource("CircleShape2D_n175u")
+
+[node name="PromptCanvasLayer" type="CanvasLayer" parent="." unique_id=2046409915]
+layer = 5
+
+[node name="PressEButton" type="Button" parent="PromptCanvasLayer" unique_id=1821361572]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.0
+offset_top = -24.0
+offset_right = 34.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Press e"
