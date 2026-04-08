@@ -524,7 +524,14 @@ size = Vector2(9, 17)
 
 [node name="Player" type="CharacterBody2D" unique_id=1677022981]
 script = ExtResource("1_4ntmi")
-gravity = 750.0
+jump_velocity = null
+gravity = null
+dash_speed = null
+dash_duration = null
+dash_cooldown = null
+roll_speed = null
+roll_duration = null
+roll_cooldown = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=84907052]
 sprite_frames = SubResource("SpriteFrames_4ntmi")
