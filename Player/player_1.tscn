@@ -523,7 +523,7 @@ size = Vector2(9, 16)
 [node name="Player1" type="CharacterBody2D" unique_id=1479950729]
 script = ExtResource("1_22iwe")
 transformed_player_scene_path = "res://Player/player.tscn"
-attack_offset_y_tweak = 3.5
+attack_offset_y_tweak = 5.0
 transform_offset_y_tweak = 2.0
 metadata/_custom_type_script = "uid://boaaxjr70kef0"
 

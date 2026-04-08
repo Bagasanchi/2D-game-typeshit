@@ -2,3 +2,5 @@ res://Player/player.tscn
 res://main.tscn
 res://World/Tile maps/room.tscn
 res://Player/player_1.tscn
+res://phone.gd
+res://Drone/drone.gd
