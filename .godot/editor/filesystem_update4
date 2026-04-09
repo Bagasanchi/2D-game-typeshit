@@ -1,4 +1,4 @@
 res://World/Tile maps/room.tscn
 res://phone.gd
 res://phone.tscn
-res://Drone/drone.gd
+res://Player/player.tscn
