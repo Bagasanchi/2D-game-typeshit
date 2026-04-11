@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cm13axtfk7nos"]
+[gd_scene format=3 uid="uid://bdnd7xs23q54u"]
 
 [ext_resource type="Texture2D" uid="uid://clau6wy7o27eb" path="res://World/Tile maps/Sprites/phone small/phone_small1.png" id="1_o2tev"]
 [ext_resource type="Texture2D" uid="uid://b1cyuf5fkvwai" path="res://World/Tile maps/Sprites/phone small/phone_small2.png" id="2_4e1hp"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cf6g53iuq137" path="res://World/Tile maps/Sprites/phone small/phone_small10.png" id="10_qxbm5"]
 [ext_resource type="Texture2D" uid="uid://7x3cvdjaj3u2" path="res://World/Tile maps/Sprites/phone small/phone_small11.png" id="11_n3uuv"]
 [ext_resource type="Script" uid="uid://d0o74xm8bxo7w" path="res://phone.gd" id="12_psg0x"]
+[ext_resource type="Texture2D" uid="uid://57q7ccembd6r" path="res://World/Tile maps/Sprites/phone screen/Black/empty.png" id="13_ji6kg"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ntkgg"]
 animations = [{
@@ -76,15 +77,65 @@ shape = SubResource("CircleShape2D_n175u")
 layer = 5
 
 [node name="PressEButton" type="Button" parent="PromptCanvasLayer" unique_id=1821361572]
-anchors_preset = 7
+texture_filter = 1
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.892
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -34.0
-offset_top = -24.0
-offset_right = 34.0
-offset_bottom = -4.0
+anchor_bottom = 0.892
+offset_left = -18.0
+offset_top = -7.5599976
+offset_right = 18.0
+offset_bottom = 12.440002
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_font_sizes/font_size = 8
 text = "Press e"
+
+[node name="PhoneScreenLayer" type="CanvasLayer" parent="." unique_id=1694312047]
+layer = 20
+
+[node name="PhoneScreenRoot" type="Control" parent="PhoneScreenLayer" unique_id=1266448934]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 118.0
+offset_right = -118.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="CenterPhoneImage" type="TextureRect" parent="PhoneScreenLayer/PhoneScreenRoot" unique_id=791502776]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_ji6kg")
+stretch_mode = 5
+
+[node name="AppsMargin" type="MarginContainer" parent="PhoneScreenLayer/PhoneScreenRoot" unique_id=199855829]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 59.0
+offset_top = 126.0
+offset_right = 53.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+mouse_filter = 2
+
+[node name="AppsGrid" type="GridContainer" parent="PhoneScreenLayer/PhoneScreenRoot/AppsMargin" unique_id=1407225172]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3

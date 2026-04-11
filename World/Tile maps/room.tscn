@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dwi18i76rjai6" path="res://Player/player.tscn" id="1_ent10"]
 [ext_resource type="Texture2D" uid="uid://bth7g257kjpp7" path="res://World/Tile maps/AxulArt´s_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt.png" id="2_jjt6p"]
 [ext_resource type="Texture2D" uid="uid://cobemj5jexiiy" path="res://World/Tile maps/AxulArt´s_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_By_AxulArt/AxulArtns_Basic-Top-down-interior_ALL_By_AxulArt.png" id="2_shmfh"]
-[ext_resource type="PackedScene" path="res://phone.tscn" id="3_h4oqt"]
+[ext_resource type="PackedScene" uid="uid://bdnd7xs23q54u" path="res://phone.tscn" id="3_h4oqt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_shmfh"]
 texture = ExtResource("2_jjt6p")

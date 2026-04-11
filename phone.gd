@@ -4,6 +4,12 @@ signal interacted(player)
 
 @onready var interact_area: Area2D = $InteractArea
 @onready var press_e_button: Button = $PromptCanvasLayer/PressEButton
+@onready var phone_screen_root: Control = $PhoneScreenLayer/PhoneScreenRoot
+@onready var apps_grid: GridContainer = $PhoneScreenLayer/PhoneScreenRoot/AppsMargin/AppsGrid
+
+const APP_ICONS_DIR := "res://AppIcons"
+const MAX_APP_ICONS := 20
+const APP_ICON_SIZE := Vector2(56.0, 56.0)
 
 var _player_in_range: Player = null
 
@@ -12,8 +18,51 @@ func _ready() -> void:
 	interact_area.body_exited.connect(_on_interact_area_body_exited)
 	press_e_button.pressed.connect(_on_press_e_button_pressed)
 	_set_prompt_visible(false)
+	_set_phone_screen_visible(false)
+	_populate_app_icons()
+
+func _populate_app_icons() -> void:
+	for child in apps_grid.get_children():
+		child.queue_free()
+
+	var dir := DirAccess.open(APP_ICONS_DIR)
+	if dir == null:
+		push_warning("Could not open app icons folder: %s" % APP_ICONS_DIR)
+		return
+
+	var files := dir.get_files()
+	files.sort()
+
+	var added := 0
+	for file_name in files:
+		if not file_name.to_lower().ends_with(".png"):
+			continue
+
+		var texture := load("%s/%s" % [APP_ICONS_DIR, file_name]) as Texture2D
+		if texture == null:
+			continue
+
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = APP_ICON_SIZE
+		icon.texture = texture
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		apps_grid.add_child(icon)
+
+		added += 1
+		if added >= MAX_APP_ICONS:
+			break
+
+	if added == 0:
+		push_warning("No PNG app icons found in %s" % APP_ICONS_DIR)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if phone_screen_root.visible and (event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel")):
+		_set_phone_screen_visible(false)
+		get_viewport().set_input_as_handled()
+		return
+
 	if _player_in_range == null:
 		return
 
@@ -39,7 +88,7 @@ func _interact_with_phone() -> void:
 		return
 
 	interacted.emit(_player_in_range)
-	print("Phone interaction triggered")
+	_set_phone_screen_visible(true)
 
 func _set_prompt_visible(visible_state: bool) -> void:
 	press_e_button.visible = visible_state
@@ -49,3 +98,6 @@ func _set_prompt_visible(visible_state: bool) -> void:
 		press_e_button.grab_focus()
 	elif press_e_button.has_focus():
 		press_e_button.release_focus()
+
+func _set_phone_screen_visible(visible_state: bool) -> void:
+	phone_screen_root.visible = visible_state
