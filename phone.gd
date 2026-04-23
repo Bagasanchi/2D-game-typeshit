@@ -10,13 +10,22 @@ signal interacted(player)
 const APP_ICONS_DIR := "res://AppIcons"
 const MAX_APP_ICONS := 20
 const APP_ICON_SIZE := Vector2(56.0, 56.0)
+const VILLAIN_SCENE_CANDIDATE_PATHS: Array[String] = [
+	"res://Hacker/main_villain.tscn",
+	"res://Hacker/hacker.tscn",
+	"res://main_villain.tscn",
+	"res://hacker.tscn"
+]
+const VILLAIN_ANIM_IDLE := &"idle"
+const VILLAIN_ANIM_WALK := &"walk"
 
 const DIALOGUE_POS_CENTER := 0
 const DIALOGUE_POS_ABOVE_VILLAIN := 1
 
 @export var play_cutscene_every_open: bool = false
-@export var villain_texture: Texture2D
+@export var villain_scene: PackedScene
 @export var villain_size: Vector2 = Vector2(44.0, 44.0)
+@export var villain_base_frame_size: Vector2 = Vector2(32.0, 32.0)
 @export var villain_entry_padding: float = 14.0
 @export var villain_corner_margin: Vector2 = Vector2(20.0, 22.0)
 @export var villain_move_duration: float = 0.2
@@ -56,9 +65,9 @@ const DIALOGUE_POS_ABOVE_VILLAIN := 1
 var _player_in_range: Player = null
 var _app_icon_nodes: Array[Control] = []
 var _cutscene_overlay: Control = null
-var _villain_actor: Panel = null
-var _villain_visual: TextureRect = null
-var _villain_fallback_label: Label = null
+var _villain_actor: Control = null
+var _villain_scene_instance: Node = null
+var _villain_sprite: AnimatedSprite2D = null
 var _dialogue_panel: PanelContainer = null
 var _dialogue_label: Label = null
 var _has_played_cutscene: bool = false
@@ -176,35 +185,14 @@ func _setup_cutscene_nodes() -> void:
 	_cutscene_overlay.visible = false
 	phone_screen_root.add_child(_cutscene_overlay)
 
-	_villain_actor = Panel.new()
+	_villain_actor = Control.new()
 	_villain_actor.name = "VillainActor"
+	_villain_actor.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_villain_actor.custom_minimum_size = villain_size
 	_villain_actor.size = villain_size
 	_villain_actor.visible = false
-	var villain_style := StyleBoxFlat.new()
-	villain_style.bg_color = Color(0.88, 0.2, 0.2, 0.95)
-	villain_style.corner_radius_top_left = 6
-	villain_style.corner_radius_top_right = 6
-	villain_style.corner_radius_bottom_right = 6
-	villain_style.corner_radius_bottom_left = 6
-	_villain_actor.add_theme_stylebox_override("panel", villain_style)
 	_cutscene_overlay.add_child(_villain_actor)
-
-	_villain_visual = TextureRect.new()
-	_villain_visual.name = "VillainTexture"
-	_villain_visual.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_villain_visual.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_villain_visual.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_villain_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_villain_actor.add_child(_villain_visual)
-
-	_villain_fallback_label = Label.new()
-	_villain_fallback_label.name = "VillainFallback"
-	_villain_fallback_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_villain_fallback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_villain_fallback_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_villain_fallback_label.text = "V"
-	_villain_actor.add_child(_villain_fallback_label)
+	_ensure_villain_scene_instance()
 
 	_dialogue_panel = PanelContainer.new()
 	_dialogue_panel.name = "DialoguePanel"
@@ -243,16 +231,88 @@ func _setup_cutscene_nodes() -> void:
 	_dialogue_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_dialogue_panel.add_child(_dialogue_label)
 
-	_refresh_villain_visual()
+	_set_villain_animation(VILLAIN_ANIM_IDLE)
 
-func _refresh_villain_visual() -> void:
-	if _villain_visual == null or _villain_fallback_label == null:
+func _ensure_villain_scene_instance() -> void:
+	if _villain_actor == null or _villain_scene_instance != null:
 		return
 
-	_villain_visual.texture = villain_texture
-	var has_texture := villain_texture != null
-	_villain_visual.visible = has_texture
-	_villain_fallback_label.visible = not has_texture
+	var resolved_scene := _resolve_villain_scene()
+	if resolved_scene == null:
+		push_warning("Could not find villain scene. Expected main_villain or hacker scene.")
+		return
+
+	_villain_scene_instance = resolved_scene.instantiate()
+	if _villain_scene_instance == null:
+		return
+
+	_villain_actor.add_child(_villain_scene_instance)
+	_villain_sprite = _find_animated_sprite(_villain_scene_instance)
+	if _villain_sprite == null:
+		push_warning("Villain scene has no AnimatedSprite2D, so no walk/idle animation can play.")
+	else:
+		_villain_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+
+	_sync_villain_scene_transform()
+
+func _resolve_villain_scene() -> PackedScene:
+	if villain_scene != null:
+		return villain_scene
+
+	for scene_path in VILLAIN_SCENE_CANDIDATE_PATHS:
+		if ResourceLoader.exists(scene_path):
+			var scene_resource := load(scene_path) as PackedScene
+			if scene_resource != null:
+				return scene_resource
+
+	return null
+
+func _find_animated_sprite(root: Node) -> AnimatedSprite2D:
+	if root is AnimatedSprite2D:
+		return root as AnimatedSprite2D
+
+	for child in root.get_children():
+		var child_node := child as Node
+		if child_node == null:
+			continue
+		var found := _find_animated_sprite(child_node)
+		if found != null:
+			return found
+
+	return null
+
+func _sync_villain_scene_transform() -> void:
+	if _villain_actor == null or _villain_scene_instance == null:
+		return
+
+	if _villain_scene_instance is Node2D:
+		var villain_node := _villain_scene_instance as Node2D
+		villain_node.position = villain_size * 0.5
+		var safe_base := Vector2(maxf(1.0, villain_base_frame_size.x), maxf(1.0, villain_base_frame_size.y))
+		villain_node.scale = Vector2(villain_size.x / safe_base.x, villain_size.y / safe_base.y)
+
+func _set_villain_animation(animation_name: StringName) -> void:
+	if _villain_sprite == null or _villain_sprite.sprite_frames == null:
+		return
+
+	var active_animation := animation_name
+	if not _villain_sprite.sprite_frames.has_animation(active_animation):
+		active_animation = VILLAIN_ANIM_IDLE
+
+	if not _villain_sprite.sprite_frames.has_animation(active_animation):
+		return
+
+	if _villain_sprite.animation != active_animation or not _villain_sprite.is_playing():
+		_villain_sprite.play(active_animation)
+
+func _set_villain_facing(horizontal_delta: float) -> void:
+	if _villain_sprite == null:
+		return
+
+	if absf(horizontal_delta) < 0.01:
+		return
+
+	_villain_sprite.flip_h = horizontal_delta < 0.0
 
 func _start_phone_cutscene() -> void:
 	if _is_cutscene_running:
@@ -284,7 +344,7 @@ func _start_phone_cutscene() -> void:
 	_set_phone_screen_visible(false)
 
 func _prepare_cutscene_open_state() -> void:
-	_refresh_villain_visual()
+	_ensure_villain_scene_instance()
 
 	if _cutscene_overlay != null:
 		_cutscene_overlay.visible = true
@@ -292,11 +352,13 @@ func _prepare_cutscene_open_state() -> void:
 	if _villain_actor != null:
 		_villain_actor.custom_minimum_size = villain_size
 		_villain_actor.size = villain_size
+		_sync_villain_scene_transform()
 		_villain_actor.position = Vector2(
 			phone_screen_root.size.x + villain_entry_padding,
 			-villain_size.y - villain_entry_padding
 		)
 		_villain_actor.visible = true
+		_set_villain_animation(VILLAIN_ANIM_IDLE)
 
 	if _dialogue_panel != null:
 		_update_dialogue_panel_layout()
@@ -433,6 +495,12 @@ func _tween_villain_to(target_position: Vector2, duration: float, run_id: int) -
 	if not _is_cutscene_valid(run_id):
 		return false
 
+	if _villain_actor != null:
+		var move_delta := target_position - _villain_actor.position
+		if move_delta.length() > 0.01:
+			_set_villain_facing(move_delta.x)
+			_set_villain_animation(VILLAIN_ANIM_WALK)
+
 	if _active_cutscene_tween != null:
 		_active_cutscene_tween.kill()
 
@@ -441,6 +509,7 @@ func _tween_villain_to(target_position: Vector2, duration: float, run_id: int) -
 	_active_cutscene_tween.tween_property(_villain_actor, "position", target_position, max(0.05, duration))
 	await _active_cutscene_tween.finished
 	_active_cutscene_tween = null
+	_set_villain_animation(VILLAIN_ANIM_IDLE)
 
 	return _is_cutscene_valid(run_id)
 
@@ -491,6 +560,7 @@ func _cancel_phone_cutscene() -> void:
 
 	if _villain_actor != null:
 		_villain_actor.visible = false
+	_set_villain_animation(VILLAIN_ANIM_IDLE)
 
 	if _dialogue_panel != null:
 		_dialogue_panel.visible = false
