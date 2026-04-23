@@ -10,7 +10,7 @@ signal interacted(player)
 const APP_ICONS_DIR := "res://AppIcons"
 const MAX_APP_ICONS := 20
 const APP_ICON_SIZE := Vector2(56.0, 56.0)
-const VILLAIN_SCENE_CANDIDATE_PATHS: Array[String] = [
+const VILLAIN_SCENE_CANDIDATE_PATHS = [
 	"res://Hacker/main_villain.tscn",
 	"res://Hacker/hacker.tscn",
 	"res://main_villain.tscn",
@@ -21,6 +21,8 @@ const VILLAIN_ANIM_WALK := &"walk"
 
 const DIALOGUE_POS_CENTER := 0
 const DIALOGUE_POS_ABOVE_VILLAIN := 1
+const VILLAIN_ROW_RIGHT_TO_LEFT := -1
+const VILLAIN_ROW_LEFT_TO_RIGHT := 1
 
 @export var play_cutscene_every_open: bool = false
 @export var villain_scene: PackedScene
@@ -28,8 +30,10 @@ const DIALOGUE_POS_ABOVE_VILLAIN := 1
 @export var villain_base_frame_size: Vector2 = Vector2(32.0, 32.0)
 @export var villain_entry_padding: float = 14.0
 @export var villain_corner_margin: Vector2 = Vector2(20.0, 22.0)
-@export var villain_move_duration: float = 0.2
+@export var villain_move_duration: float = 0.3
 @export var villain_row_offset: float = 14.0
+@export var stolen_icon_scale: float = 0.52
+@export var stolen_icon_spacing: float = 22.0
 @export var dialogue_line_duration: float = 1.25
 @export var dialogue_auto_time_per_character: float = 0.035
 @export var phone_auto_close_delay: float = 1.0
@@ -68,6 +72,8 @@ var _cutscene_overlay: Control = null
 var _villain_actor: Control = null
 var _villain_scene_instance: Node = null
 var _villain_sprite: AnimatedSprite2D = null
+var _stolen_icon_train: Array[Control] = []
+var _last_villain_row_direction: int = VILLAIN_ROW_RIGHT_TO_LEFT
 var _dialogue_panel: PanelContainer = null
 var _dialogue_label: Label = null
 var _has_played_cutscene: bool = false
@@ -178,9 +184,12 @@ func _should_play_cutscene() -> bool:
 	return not _has_played_cutscene
 
 func _setup_cutscene_nodes() -> void:
+	phone_screen_root.clip_contents = true
+
 	_cutscene_overlay = Control.new()
 	_cutscene_overlay.name = "CutsceneOverlay"
 	_cutscene_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_cutscene_overlay.clip_contents = true
 	_cutscene_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_cutscene_overlay.visible = false
 	phone_screen_root.add_child(_cutscene_overlay)
@@ -345,6 +354,8 @@ func _start_phone_cutscene() -> void:
 
 func _prepare_cutscene_open_state() -> void:
 	_ensure_villain_scene_instance()
+	_clear_stolen_icon_train()
+	_last_villain_row_direction = VILLAIN_ROW_RIGHT_TO_LEFT
 
 	if _cutscene_overlay != null:
 		_cutscene_overlay.visible = true
@@ -371,31 +382,166 @@ func _prepare_cutscene_open_state() -> void:
 	apps_grid.visible = true
 
 func _run_icon_steal_sequence(run_id: int) -> bool:
-	var ordered_icons := _get_icons_in_zigzag_order()
-	if ordered_icons.is_empty():
-		return await _move_villain_to_corner(run_id)
+	var rows := _get_icon_rows()
+	if rows.is_empty():
+		return true
 
-	var columns := maxi(1, apps_grid.columns)
-	for idx in range(ordered_icons.size()):
-		var icon := ordered_icons[idx]
-		if not is_instance_valid(icon):
-			continue
-		if not icon.visible:
-			continue
-
-		var target := _get_icon_center_in_phone(icon) - (villain_size * 0.5)
-		var row_index := idx / columns
-		target.y += villain_row_offset if row_index % 2 == 0 else -villain_row_offset
-
-		var moved := await _tween_villain_to(target, villain_move_duration, run_id)
-		if not moved:
+	for row_index in range(rows.size()):
+		if not _is_cutscene_valid(run_id):
 			return false
 
-		icon.visible = false
+		var row_icons: Array = rows[row_index]
+		if row_icons.is_empty():
+			continue
+
+		var row_direction := VILLAIN_ROW_RIGHT_TO_LEFT if row_index % 2 == 0 else VILLAIN_ROW_LEFT_TO_RIGHT
+		var row_y := _get_row_travel_y(row_icons)
+		if row_index == 0:
+			row_y = villain_corner_margin.y
+		var spawn_pos := _get_row_edge_position(row_y, row_direction)
+
+		_set_villain_and_train_visible(false)
+		_villain_actor.position = spawn_pos
+		_sync_train_to_villain_immediate(row_direction)
+		_set_villain_and_train_visible(true)
+		_set_villain_animation(VILLAIN_ANIM_IDLE)
+
+		var ordered_row_icons := _get_row_icons_in_direction(row_icons, row_direction)
+		for icon in ordered_row_icons:
+			if not is_instance_valid(icon):
+				continue
+			if not icon.visible:
+				continue
+
+			var target := _get_icon_center_in_phone(icon) - (villain_size * 0.5)
+			var moved := await _tween_villain_to(target, villain_move_duration, run_id)
+			if not moved:
+				return false
+
+			_steal_icon_into_train(icon)
+			_sync_train_to_villain_immediate(row_direction)
+
+		var exit_pos := _get_row_edge_position(row_y, -row_direction)
+		var exited := await _tween_villain_to(exit_pos, villain_move_duration, run_id)
+		if not exited:
+			return false
+
+		_set_villain_and_train_visible(false)
+		_last_villain_row_direction = row_direction
 
 	_set_app_icons_visible(false)
 	apps_grid.visible = false
-	return await _move_villain_to_corner(run_id)
+	return _is_cutscene_valid(run_id)
+
+func _get_icon_rows() -> Array:
+	var rows: Array = []
+	var icon_count := _app_icon_nodes.size()
+	if icon_count == 0:
+		return rows
+
+	var columns := maxi(1, apps_grid.columns)
+	var row_count := int(ceil(float(icon_count) / float(columns)))
+	for row in range(row_count):
+		var row_icons: Array = []
+		var row_start := row * columns
+		var row_end := mini(row_start + columns, icon_count)
+		for idx in range(row_start, row_end):
+			row_icons.append(_app_icon_nodes[idx])
+		rows.append(row_icons)
+
+	return rows
+
+func _get_row_icons_in_direction(row_icons: Array, row_direction: int) -> Array:
+	var ordered: Array = []
+	if row_direction == VILLAIN_ROW_RIGHT_TO_LEFT:
+		for idx in range(row_icons.size() - 1, -1, -1):
+			ordered.append(row_icons[idx])
+		return ordered
+
+	for icon in row_icons:
+		ordered.append(icon)
+	return ordered
+
+func _get_row_travel_y(row_icons: Array) -> float:
+	if row_icons.is_empty():
+		return villain_corner_margin.y
+
+	var first_icon := row_icons[0] as Control
+	if not is_instance_valid(first_icon):
+		return villain_corner_margin.y
+
+	var row_y := _get_icon_center_in_phone(first_icon).y - (villain_size.y * 0.5)
+	var max_y := maxf(villain_corner_margin.y, phone_screen_root.size.y - villain_size.y - villain_corner_margin.y)
+	return clampf(row_y, villain_corner_margin.y, max_y)
+
+func _get_row_edge_position(row_y: float, row_direction: int) -> Vector2:
+	var x := villain_corner_margin.x
+	if row_direction == VILLAIN_ROW_RIGHT_TO_LEFT:
+		x = phone_screen_root.size.x - villain_size.x - villain_corner_margin.x
+
+	return Vector2(x, row_y)
+
+func _set_villain_and_train_visible(visible_state: bool) -> void:
+	if _villain_actor != null:
+		_villain_actor.visible = visible_state
+
+	for follower in _stolen_icon_train:
+		if is_instance_valid(follower):
+			follower.visible = visible_state
+
+func _sync_train_to_villain_immediate(row_direction: int) -> void:
+	if _villain_actor == null:
+		return
+
+	for idx in range(_stolen_icon_train.size()):
+		var follower := _stolen_icon_train[idx]
+		if not is_instance_valid(follower):
+			continue
+
+		var train_target := _get_train_target_for_index(idx, _villain_actor.position, row_direction, follower.size)
+		follower.position = train_target
+
+func _steal_icon_into_train(icon: Control) -> void:
+	if _cutscene_overlay == null:
+		return
+
+	var icon_texture_rect := icon as TextureRect
+	if icon_texture_rect == null or icon_texture_rect.texture == null:
+		icon.visible = false
+		return
+
+	var follower := TextureRect.new()
+	follower.texture = icon_texture_rect.texture
+	follower.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	follower.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	follower.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	follower.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var follower_size := APP_ICON_SIZE * stolen_icon_scale
+	follower.custom_minimum_size = follower_size
+	follower.size = follower_size
+	follower.position = _get_icon_center_in_phone(icon) - (follower_size * 0.5)
+	_cutscene_overlay.add_child(follower)
+	_stolen_icon_train.append(follower)
+
+	icon.visible = false
+
+func _get_train_target_for_index(train_index: int, villain_target: Vector2, row_direction: int, follower_size: Vector2) -> Vector2:
+	var behind_sign := -row_direction
+	var offset := Vector2(stolen_icon_spacing * float(train_index + 1) * float(behind_sign), 0.0)
+	var target := villain_target + offset
+	return _clamp_to_phone_bounds(target, follower_size)
+
+func _clamp_to_phone_bounds(target: Vector2, control_size: Vector2) -> Vector2:
+	var max_x := maxf(0.0, phone_screen_root.size.x - control_size.x)
+	var max_y := maxf(0.0, phone_screen_root.size.y - control_size.y)
+	return Vector2(clampf(target.x, 0.0, max_x), clampf(target.y, 0.0, max_y))
+
+func _clear_stolen_icon_train() -> void:
+	for follower in _stolen_icon_train:
+		if is_instance_valid(follower):
+			follower.queue_free()
+	_stolen_icon_train.clear()
 
 func _run_dialogue_sequence(run_id: int) -> bool:
 	if not _is_cutscene_valid(run_id):
@@ -495,6 +641,14 @@ func _tween_villain_to(target_position: Vector2, duration: float, run_id: int) -
 	if not _is_cutscene_valid(run_id):
 		return false
 
+	target_position = _clamp_to_phone_bounds(target_position, villain_size)
+	var row_direction := _last_villain_row_direction
+	if _villain_actor != null:
+		var move_delta := target_position - _villain_actor.position
+		if absf(move_delta.x) > 0.01:
+			row_direction = VILLAIN_ROW_LEFT_TO_RIGHT if move_delta.x > 0.0 else VILLAIN_ROW_RIGHT_TO_LEFT
+			_last_villain_row_direction = row_direction
+
 	if _villain_actor != null:
 		var move_delta := target_position - _villain_actor.position
 		if move_delta.length() > 0.01:
@@ -505,8 +659,16 @@ func _tween_villain_to(target_position: Vector2, duration: float, run_id: int) -
 		_active_cutscene_tween.kill()
 
 	_active_cutscene_tween = create_tween()
-	_active_cutscene_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_active_cutscene_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	_active_cutscene_tween.tween_property(_villain_actor, "position", target_position, max(0.05, duration))
+
+	for idx in range(_stolen_icon_train.size()):
+		var follower := _stolen_icon_train[idx]
+		if not is_instance_valid(follower):
+			continue
+		var follower_target := _get_train_target_for_index(idx, target_position, row_direction, follower.size)
+		_active_cutscene_tween.parallel().tween_property(follower, "position", follower_target, max(0.05, duration))
+
 	await _active_cutscene_tween.finished
 	_active_cutscene_tween = null
 	_set_villain_animation(VILLAIN_ANIM_IDLE)
@@ -561,6 +723,7 @@ func _cancel_phone_cutscene() -> void:
 	if _villain_actor != null:
 		_villain_actor.visible = false
 	_set_villain_animation(VILLAIN_ANIM_IDLE)
+	_clear_stolen_icon_train()
 
 	if _dialogue_panel != null:
 		_dialogue_panel.visible = false

@@ -504,7 +504,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 8.0
+"speed": 6.5
 }, {
 "frames": [{
 "duration": 1.0,
@@ -579,7 +579,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
-"speed": 10.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -596,7 +596,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_stop",
-"speed": 9.0
+"speed": 7.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bg72n"]
@@ -606,8 +606,7 @@ size = Vector2(7, 14)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=592537369]
 sprite_frames = SubResource("SpriteFrames_bglel")
-animation = &"idle"
-frame_progress = 0.26850373
+animation = &"attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1171316749]
 visible = false
