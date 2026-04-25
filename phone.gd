@@ -5,11 +5,14 @@ signal interacted(player)
 @onready var interact_area: Area2D = $InteractArea
 @onready var press_e_button: Button = $PromptCanvasLayer/PressEButton
 @onready var phone_screen_root: Control = $PhoneScreenLayer/PhoneScreenRoot
+@onready var apps_margin: Control = $PhoneScreenLayer/PhoneScreenRoot/AppsMargin
 @onready var apps_grid: GridContainer = $PhoneScreenLayer/PhoneScreenRoot/AppsMargin/AppsGrid
 
 const APP_ICONS_DIR := "res://AppIcons"
 const MAX_APP_ICONS := 20
 const APP_ICON_SIZE := Vector2(56.0, 56.0)
+const DEFAULT_DIALOGUE_FONT_PATH := "res://Fonts/TTF/dogicapixel.ttf"
+const DEFAULT_DIALOGUE_PANEL_SCENE_PATH := "res://UI/dialogue_panel.tscn"
 const VILLAIN_SCENE_CANDIDATE_PATHS = [
 	"res://Hacker/main_villain.tscn",
 	"res://Hacker/hacker.tscn",
@@ -23,6 +26,9 @@ const DIALOGUE_POS_CENTER := 0
 const DIALOGUE_POS_ABOVE_VILLAIN := 1
 const VILLAIN_ROW_RIGHT_TO_LEFT := -1
 const VILLAIN_ROW_LEFT_TO_RIGHT := 1
+const CUTSCENE_Z_STOLEN_ICONS := 10
+const CUTSCENE_Z_VILLAIN := 20
+const CUTSCENE_Z_DIALOGUE := 30
 
 @export var play_cutscene_every_open: bool = false
 @export var villain_scene: PackedScene
@@ -37,12 +43,18 @@ const VILLAIN_ROW_LEFT_TO_RIGHT := 1
 @export var dialogue_line_duration: float = 1.25
 @export var dialogue_auto_time_per_character: float = 0.035
 @export var phone_auto_close_delay: float = 1.0
+@export var dialogue_panel_scene: PackedScene
 @export_enum("Center", "Above Villain") var dialogue_position_mode: int = DIALOGUE_POS_ABOVE_VILLAIN
-@export var dialogue_panel_size: Vector2 = Vector2(260.0, 92.0)
+@export var dialogue_panel_size: Vector2 = Vector2(50.0, 72.0)
 @export var dialogue_screen_margin: Vector2 = Vector2(10.0, 10.0)
 @export var dialogue_villain_gap: float = 10.0
+@export var dialogue_offset: Vector2 = Vector2.ZERO
+@export_range(8, 48, 1) var dialogue_font_size: int = 16
+@export var dialogue_font: Font
+@export var smooth_dialogue_text: bool = true
+@export var villain_dialogue_bottom_margin: float = 20.0
 @export var villain_dialogue_lines_en: PackedStringArray = PackedStringArray([
-	"- heya.",
+	"heya.",
 	"so... funny story.",
 	"i hacked your phone.",
 	"yeah, yeah, don't bother checking.",
@@ -74,7 +86,7 @@ var _villain_scene_instance: Node = null
 var _villain_sprite: AnimatedSprite2D = null
 var _stolen_icon_train: Array[Control] = []
 var _last_villain_row_direction: int = VILLAIN_ROW_RIGHT_TO_LEFT
-var _dialogue_panel: PanelContainer = null
+var _dialogue_panel: Control = null
 var _dialogue_label: Label = null
 var _has_played_cutscene: bool = false
 var _is_cutscene_running: bool = false
@@ -88,8 +100,26 @@ func _ready() -> void:
 	press_e_button.pressed.connect(_on_press_e_button_pressed)
 	_set_prompt_visible(false)
 	_set_phone_screen_visible(false)
+	_resolve_dialogue_font()
+	_resolve_dialogue_panel_scene()
 	_populate_app_icons()
 	_setup_cutscene_nodes()
+
+func _resolve_dialogue_font() -> void:
+	if dialogue_font != null:
+		return
+
+	if ResourceLoader.exists(DEFAULT_DIALOGUE_FONT_PATH):
+		dialogue_font = load(DEFAULT_DIALOGUE_FONT_PATH) as Font
+	else:
+		push_warning("Dialogue font missing at %s" % DEFAULT_DIALOGUE_FONT_PATH)
+
+func _resolve_dialogue_panel_scene() -> void:
+	if dialogue_panel_scene != null:
+		return
+
+	if ResourceLoader.exists(DEFAULT_DIALOGUE_PANEL_SCENE_PATH):
+		dialogue_panel_scene = load(DEFAULT_DIALOGUE_PANEL_SCENE_PATH) as PackedScene
 
 func _populate_app_icons() -> void:
 	_app_icon_nodes.clear()
@@ -200,10 +230,17 @@ func _setup_cutscene_nodes() -> void:
 	_villain_actor.custom_minimum_size = villain_size
 	_villain_actor.size = villain_size
 	_villain_actor.visible = false
+	_villain_actor.z_index = CUTSCENE_Z_VILLAIN
 	_cutscene_overlay.add_child(_villain_actor)
 	_ensure_villain_scene_instance()
 
-	_dialogue_panel = PanelContainer.new()
+	var used_dialogue_scene := false
+	_dialogue_panel = _instantiate_dialogue_panel_from_scene()
+	if _dialogue_panel != null:
+		used_dialogue_scene = true
+	else:
+		_dialogue_panel = PanelContainer.new()
+
 	_dialogue_panel.name = "DialoguePanel"
 	_dialogue_panel.anchor_left = 0.06
 	_dialogue_panel.anchor_top = 0.72
@@ -214,33 +251,77 @@ func _setup_cutscene_nodes() -> void:
 	_dialogue_panel.offset_right = 0.0
 	_dialogue_panel.offset_bottom = 0.0
 	_dialogue_panel.visible = false
-	var dialogue_style := StyleBoxFlat.new()
-	dialogue_style.bg_color = Color(0.0, 0.0, 0.0, 0.78)
-	dialogue_style.border_color = Color(0.95, 0.95, 0.95, 0.5)
-	dialogue_style.border_width_left = 1
-	dialogue_style.border_width_top = 1
-	dialogue_style.border_width_right = 1
-	dialogue_style.border_width_bottom = 1
-	dialogue_style.corner_radius_top_left = 6
-	dialogue_style.corner_radius_top_right = 6
-	dialogue_style.corner_radius_bottom_right = 6
-	dialogue_style.corner_radius_bottom_left = 6
-	dialogue_style.content_margin_left = 10
-	dialogue_style.content_margin_top = 8
-	dialogue_style.content_margin_right = 10
-	dialogue_style.content_margin_bottom = 8
-	_dialogue_panel.add_theme_stylebox_override("panel", dialogue_style)
+	_dialogue_panel.z_index = CUTSCENE_Z_DIALOGUE
+	if not used_dialogue_scene:
+		var dialogue_style := StyleBoxFlat.new()
+		dialogue_style.bg_color = Color(0.0, 0.0, 0.0, 0.78)
+		dialogue_style.border_color = Color(0.95, 0.95, 0.95, 0.5)
+		dialogue_style.border_width_left = 1
+		dialogue_style.border_width_top = 1
+		dialogue_style.border_width_right = 1
+		dialogue_style.border_width_bottom = 1
+		dialogue_style.corner_radius_top_left = 6
+		dialogue_style.corner_radius_top_right = 6
+		dialogue_style.corner_radius_bottom_right = 6
+		dialogue_style.corner_radius_bottom_left = 6
+		dialogue_style.content_margin_left = 8
+		dialogue_style.content_margin_top = 6
+		dialogue_style.content_margin_right = 8
+		dialogue_style.content_margin_bottom = 6
+		_dialogue_panel.add_theme_stylebox_override("panel", dialogue_style)
 	_cutscene_overlay.add_child(_dialogue_panel)
 
-	_dialogue_label = Label.new()
-	_dialogue_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_dialogue_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	_dialogue_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_dialogue_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_dialogue_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_dialogue_panel.add_child(_dialogue_label)
+	_dialogue_label = _find_dialogue_label(_dialogue_panel)
+	if _dialogue_label == null:
+		if used_dialogue_scene:
+			push_warning("Dialogue scene has no Label node. Adding a fallback label named DialogueLabel.")
+		_dialogue_label = Label.new()
+		_dialogue_label.name = "DialogueLabel"
+		_dialogue_panel.add_child(_dialogue_label)
+		used_dialogue_scene = false
+
+	if not used_dialogue_scene:
+		_dialogue_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		_dialogue_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+		_dialogue_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_dialogue_label.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR if smooth_dialogue_text else CanvasItem.TEXTURE_FILTER_NEAREST
+		if dialogue_font != null:
+			_dialogue_label.add_theme_font_override("font", dialogue_font)
+		_dialogue_label.add_theme_font_size_override("font_size", dialogue_font_size)
+		_dialogue_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_dialogue_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 	_set_villain_animation(VILLAIN_ANIM_IDLE)
+
+func _instantiate_dialogue_panel_from_scene() -> Control:
+	if dialogue_panel_scene == null:
+		return null
+
+	var instance := dialogue_panel_scene.instantiate()
+	if instance is Control:
+		return instance as Control
+
+	push_warning("Dialogue panel scene root must inherit Control. Falling back to generated dialogue panel.")
+	if instance != null:
+		instance.free()
+	return null
+
+func _find_dialogue_label(root: Node) -> Label:
+	if root == null:
+		return null
+
+	if root is Label:
+		return root as Label
+
+	for child in root.get_children():
+		var child_node := child as Node
+		if child_node == null:
+			continue
+		var found := _find_dialogue_label(child_node)
+		if found != null:
+			return found
+
+	return null
 
 func _ensure_villain_scene_instance() -> void:
 	if _villain_actor == null or _villain_scene_instance != null:
@@ -340,6 +421,10 @@ func _start_phone_cutscene() -> void:
 
 	var icons_done := await _run_icon_steal_sequence(run_id)
 	if not icons_done:
+		return
+
+	var villain_positioned := await _move_villain_to_dialogue_spot(run_id)
+	if not villain_positioned:
 		return
 
 	var dialogue_done := await _run_dialogue_sequence(run_id)
@@ -521,6 +606,7 @@ func _steal_icon_into_train(icon: Control) -> void:
 	follower.custom_minimum_size = follower_size
 	follower.size = follower_size
 	follower.position = _get_icon_center_in_phone(icon) - (follower_size * 0.5)
+	follower.z_index = CUTSCENE_Z_STOLEN_ICONS
 	_cutscene_overlay.add_child(follower)
 	_stolen_icon_train.append(follower)
 
@@ -599,14 +685,39 @@ func _is_dialogue_advance_event(event: InputEvent) -> bool:
 
 	return false
 
+func _get_dialogue_bounds() -> Rect2:
+	var fallback := Rect2(Vector2.ZERO, phone_screen_root.size)
+	if apps_margin == null:
+		return fallback
+
+	var phone_rect := phone_screen_root.get_global_rect()
+	var margin_rect := apps_margin.get_global_rect()
+	var local_pos := margin_rect.position - phone_rect.position
+
+	var clamped_pos := Vector2(
+		clampf(local_pos.x, 0.0, phone_screen_root.size.x),
+		clampf(local_pos.y, 0.0, phone_screen_root.size.y)
+	)
+	var max_size := phone_screen_root.size - clamped_pos
+	var clamped_size := Vector2(
+		clampf(margin_rect.size.x, 0.0, max_size.x),
+		clampf(margin_rect.size.y, 0.0, max_size.y)
+	)
+
+	if clamped_size.x < 24.0 or clamped_size.y < 24.0:
+		return fallback
+
+	return Rect2(clamped_pos, clamped_size)
+
 func _update_dialogue_panel_layout() -> void:
 	if _dialogue_panel == null:
 		return
 
-	var size_limits := phone_screen_root.size - (dialogue_screen_margin * 2.0)
+	var dialogue_bounds := _get_dialogue_bounds()
+	var size_limits := dialogue_bounds.size - (dialogue_screen_margin * 2.0)
 	var panel_size := dialogue_panel_size
 	panel_size.x = clampf(panel_size.x, 120.0, maxf(120.0, size_limits.x))
-	panel_size.y = clampf(panel_size.y, 56.0, maxf(56.0, size_limits.y))
+	panel_size.y = clampf(panel_size.y, 44.0, maxf(44.0, size_limits.y))
 
 	_dialogue_panel.anchor_left = 0.0
 	_dialogue_panel.anchor_top = 0.0
@@ -622,20 +733,33 @@ func _update_dialogue_panel_layout() -> void:
 			_villain_actor.position.y - panel_size.y - dialogue_villain_gap
 		)
 	else:
-		target_pos = (phone_screen_root.size - panel_size) * 0.5
+		target_pos = dialogue_bounds.position + ((dialogue_bounds.size - panel_size) * 0.5)
 
-	var max_x: float = maxf(dialogue_screen_margin.x, phone_screen_root.size.x - panel_size.x - dialogue_screen_margin.x)
-	var max_y: float = maxf(dialogue_screen_margin.y, phone_screen_root.size.y - panel_size.y - dialogue_screen_margin.y)
-	target_pos.x = clampf(target_pos.x, dialogue_screen_margin.x, max_x)
-	target_pos.y = clampf(target_pos.y, dialogue_screen_margin.y, max_y)
+	target_pos += dialogue_offset
+
+	var min_x := dialogue_bounds.position.x + dialogue_screen_margin.x
+	var min_y := dialogue_bounds.position.y + dialogue_screen_margin.y
+	var max_x: float = maxf(min_x, dialogue_bounds.position.x + dialogue_bounds.size.x - panel_size.x - dialogue_screen_margin.x)
+	var max_y: float = maxf(min_y, dialogue_bounds.position.y + dialogue_bounds.size.y - panel_size.y - dialogue_screen_margin.y)
+	target_pos.x = clampf(target_pos.x, min_x, max_x)
+	target_pos.y = clampf(target_pos.y, min_y, max_y)
 	_dialogue_panel.position = target_pos
 
-func _move_villain_to_corner(run_id: int) -> bool:
-	var corner_target := Vector2(
-		phone_screen_root.size.x - villain_size.x - villain_corner_margin.x,
-		phone_screen_root.size.y - villain_size.y - villain_corner_margin.y
+func _move_villain_to_dialogue_spot(run_id: int) -> bool:
+	if _villain_actor == null:
+		return true
+
+	_set_villain_and_train_visible(true)
+	var target := Vector2(
+		(phone_screen_root.size.x - villain_size.x) * 0.5,
+		phone_screen_root.size.y - villain_size.y - maxf(0.0, villain_dialogue_bottom_margin)
 	)
-	return await _tween_villain_to(corner_target, villain_move_duration, run_id)
+	var moved := await _tween_villain_to(target, maxf(0.15, villain_move_duration), run_id)
+	if not moved:
+		return false
+
+	_sync_train_to_villain_immediate(_last_villain_row_direction)
+	return _is_cutscene_valid(run_id)
 
 func _tween_villain_to(target_position: Vector2, duration: float, run_id: int) -> bool:
 	if not _is_cutscene_valid(run_id):

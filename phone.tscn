@@ -68,6 +68,7 @@ autoplay = "vibrate"
 frame_progress = 0.7011876
 
 [node name="InteractArea" type="Area2D" parent="." unique_id=1570804303]
+visible = false
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=758190815]
