@@ -305,7 +305,7 @@ func _instantiate_dialogue_panel_from_scene() -> Control:
 	if instance != null:
 		instance.free()
 	return null
-
+#test
 func _find_dialogue_label(root: Node) -> Label:
 	if root == null:
 		return null
